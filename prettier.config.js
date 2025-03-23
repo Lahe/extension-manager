@@ -11,11 +11,10 @@ export default {
   arrowParens: 'avoid',
   proseWrap: 'preserve',
   htmlWhitespaceSensitivity: 'css',
-  endOfLine: 'lf',
   embeddedLanguageFormatting: 'auto',
   // Since prettier 3.0, manually specifying plugins is required
-  plugins: ['@ianvs/prettier-plugin-sort-imports'],
-  // This plugin's options
+  plugins: ['@ianvs/prettier-plugin-sort-imports', 'prettier-plugin-tailwindcss'],
+  // Import sort plugin options
   importOrder: ['^@core/(.*)$', '', '^@server/(.*)$', '', '^@ui/(.*)$', '', '^[./]'],
   importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
   importOrderTypeScriptVersion: '5.0.0',
