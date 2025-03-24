@@ -1,26 +1,43 @@
 import js from '@eslint/js'
-import prettierConfig from 'eslint-config-prettier'
-import reactHooks from 'eslint-plugin-react-hooks'
+import pluginRouter from '@tanstack/eslint-plugin-router'
+import eslintConfigPrettier from 'eslint-config-prettier/flat'
+import reactPlugin from 'eslint-plugin-react'
+import * as reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ['dist'] },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended, prettierConfig],
-    files: ['**/*.{ts,tsx}'],
+    ignores: ['**/dist/*', '**/node_modules/*', '**/build/*'],
+  },
+  { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...tseslint.configs.stylistic,
+  ...pluginRouter.configs['flat/recommended'],
+  reactHooks.configs['recommended-latest'],
+  reactRefresh.configs.recommended,
+  {
+    ...reactPlugin.configs.flat.recommended,
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+  reactPlugin.configs.flat['jsx-runtime'],
+  {
+    name: 'main',
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      ecmaVersion: 2022,
+      parser: tseslint.parser,
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
     },
-    plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
-    },
-    rules: {
-      ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-    },
-  }
+  },
+  eslintConfigPrettier
 )
