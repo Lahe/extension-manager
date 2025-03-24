@@ -16,17 +16,10 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   ...tseslint.configs.stylistic,
   ...pluginRouter.configs['flat/recommended'],
+  reactPlugin.configs.flat.recommended,
+  reactPlugin.configs.flat['jsx-runtime'],
   reactHooks.configs['recommended-latest'],
   reactRefresh.configs.recommended,
-  {
-    ...reactPlugin.configs.flat.recommended,
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
-  },
-  reactPlugin.configs.flat['jsx-runtime'],
   {
     name: 'main',
     languageOptions: {
@@ -36,6 +29,11 @@ export default tseslint.config(
       globals: {
         ...globals.node,
         ...globals.browser,
+      },
+    },
+    settings: {
+      react: {
+        version: 'detect',
       },
     },
   },
