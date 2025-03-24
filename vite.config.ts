@@ -10,8 +10,8 @@ export default defineConfig({
   plugins: [
     TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
     react(),
-    tailwindcss(),
     tsconfigPaths(),
+    tailwindcss(),
   ],
   resolve: {
     alias: {

@@ -1,4 +1,5 @@
 import js from '@eslint/js'
+import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginRouter from '@tanstack/eslint-plugin-router'
 import eslintConfigPrettier from 'eslint-config-prettier/flat'
 import reactPlugin from 'eslint-plugin-react'
@@ -15,6 +16,7 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...tseslint.configs.stylistic,
+  ...pluginQuery.configs['flat/recommended'],
   ...pluginRouter.configs['flat/recommended'],
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
