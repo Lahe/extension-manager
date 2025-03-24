@@ -17,6 +17,9 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.114.27
         version: 1.114.27(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@tanstack/zod-adapter':
+        specifier: ^1.114.27
+        version: 1.114.27(@tanstack/react-router@1.114.27(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(zod@3.24.2)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -41,6 +44,9 @@ importers:
       tw-animate-css:
         specifier: ^1.2.4
         version: 1.2.4
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@eslint/js':
         specifier: ^9.23.0
@@ -48,6 +54,9 @@ importers:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.4.1
         version: 4.4.1(prettier@3.5.3)
+      '@tanstack/eslint-plugin-router':
+        specifier: ^1.114.12
+        version: 1.114.12(eslint@9.23.0(jiti@2.4.2))(typescript@5.7.3)
       '@tanstack/react-router-devtools':
         specifier: ^1.114.27
         version: 1.114.27(@tanstack/react-router@1.114.27(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@tanstack/router-core@1.114.25)(csstype@3.1.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(tiny-invariant@1.3.3)
@@ -669,6 +678,11 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6
 
+  '@tanstack/eslint-plugin-router@1.114.12':
+    resolution: {integrity: sha512-+o/1ZFpjvPyg7MFIV5WG577TR/HVxvBi9e7t6O+A99q4rfvx83XdhUa9soKCVRJROMklqWnww6ifFYgP/l04XA==}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
+
   '@tanstack/history@1.114.22':
     resolution: {integrity: sha512-CNwKraj/Xa8H7DUyzrFBQC3wL96JzIxT4i9CW0hxqFNNmLDyUcMJr8264iqqfxC0u1lFSG96URad08T2Qhadpw==}
     engines: {node: '>=12'}
@@ -750,6 +764,13 @@ packages:
   '@tanstack/virtual-file-routes@1.114.12':
     resolution: {integrity: sha512-aR13V1kSE/kUkP4a8snmqvj82OUlR5Q/rzxICmObLCsERGfzikUc4wquOy1d/RzJgsLb8o+FiOjSWynt4T7Jhg==}
     engines: {node: '>=12'}
+
+  '@tanstack/zod-adapter@1.114.27':
+    resolution: {integrity: sha512-pesyrNnwx5tiQdNQO5s2mULYB+k8tvzQXjCWswX2Cy9MItVNIy918AU+w/GZUK2ys1KVqDRa3ot57iRAHsAI7g==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      '@tanstack/react-router': '>=1.43.2'
+      zod: ^3.23.8
 
   '@testing-library/dom@10.4.0':
     resolution: {integrity: sha512-pemlzrSESWbdAloYml3bAJMEfNh1Z7EduzqPKprCH5S341frlpYnUEW0H72dLxa6IsYr+mPno20GiSm+h9dEdQ==}
@@ -2935,6 +2956,14 @@ snapshots:
       tailwindcss: 4.0.15
       vite: 6.2.2(@types/node@22.13.11)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)(yaml@2.7.0)
 
+  '@tanstack/eslint-plugin-router@1.114.12(eslint@9.23.0(jiti@2.4.2))(typescript@5.7.3)':
+    dependencies:
+      '@typescript-eslint/utils': 8.27.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.7.3)
+      eslint: 9.23.0(jiti@2.4.2)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
   '@tanstack/history@1.114.22': {}
 
   '@tanstack/react-router-devtools@1.114.27(@tanstack/react-router@1.114.27(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@tanstack/router-core@1.114.25)(csstype@3.1.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(tiny-invariant@1.3.3)':
@@ -3027,6 +3056,11 @@ snapshots:
   '@tanstack/store@0.7.0': {}
 
   '@tanstack/virtual-file-routes@1.114.12': {}
+
+  '@tanstack/zod-adapter@1.114.27(@tanstack/react-router@1.114.27(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(zod@3.24.2)':
+    dependencies:
+      '@tanstack/react-router': 1.114.27(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      zod: 3.24.2
 
   '@testing-library/dom@10.4.0':
     dependencies:
