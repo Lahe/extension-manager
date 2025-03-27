@@ -1,5 +1,5 @@
+import { createRouter } from '@/router.tsx'
 import { StartClient } from '@tanstack/react-start'
-import { createRouter } from '~/router.tsx'
 import { hydrateRoot } from 'react-dom/client'
 
 const router = createRouter()

@@ -1,3 +1,6 @@
+import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary.tsx'
+import { NotFound } from '@/components/NotFound.tsx'
+import indexCss from '@/styles/index.css?url'
 import { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
@@ -8,9 +11,6 @@ import {
   Scripts,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary.tsx'
-import { NotFound } from '~/components/NotFound.tsx'
-import indexCss from '~/styles/index.css?url'
 import type { ReactNode } from 'react'
 
 export const Route = createRootRouteWithContext<{
@@ -18,7 +18,7 @@ export const Route = createRootRouteWithContext<{
 }>()({
   head: () => ({
     meta: [
-      { charset: 'utf-8' },
+      { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { title: 'TanStack Start Starter' },
     ],

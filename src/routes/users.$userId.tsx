@@ -1,8 +1,7 @@
+import { NotFound } from '@/components/NotFound'
+import { userQueryOptions } from '@/utils/users'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { ErrorComponent, createFileRoute } from '@tanstack/react-router'
-import type { ErrorComponentProps } from '@tanstack/react-router'
-import { NotFound } from '~/components/NotFound'
-import { userQueryOptions } from '~/utils/users'
+import { createFileRoute, ErrorComponent, type ErrorComponentProps } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/users/$userId')({
   loader: async ({ context, params: { userId } }) => {
