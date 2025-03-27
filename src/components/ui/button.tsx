@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils'
 import { Slot } from '@radix-ui/react-slot'
+import { cn } from '~/lib/utils'
 import { cva, type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
 
@@ -43,7 +43,13 @@ function Button({
   }) {
   const Comp = asChild ? Slot : 'button'
 
-  return <Comp data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props} />
+  return (
+    <Comp
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

@@ -44,3 +44,4 @@ Thumbs.db
 /api/
 /server/build
 /public/build
+.output
