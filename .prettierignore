@@ -1,8 +1,8 @@
 # Ignore artifacts:
 node_modules
-build
+**/build
 coverage
-public
-dist
+**/public
+**/dist
 pnpm-lock.yaml
 routeTree.gen.ts
