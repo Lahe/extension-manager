@@ -14,6 +14,12 @@
     "prepare": "husky",
     "format": "prettier --write --ignore-unknown --ignore-path .prettierignore --cache ."
   },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write --ignore-unknown"
+    ]
+  },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.2",
     "@tailwindcss/vite": "^4.0.15",
