@@ -1,9 +1,15 @@
 import { DefaultCatchBoundary } from '@/components/errors/default-catch-boundary.tsx'
 import { NotFound } from '@/components/errors/not-found.tsx'
-import indexCss from '@/styles/index.css?url'
+import appCss from '@/styles/app.css?url'
 import { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
+import {
+  createRootRouteWithContext,
+  HeadContent,
+  Outlet,
+  ScriptOnce,
+  Scripts,
+} from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import type { ReactNode } from 'react'
 
@@ -17,7 +23,7 @@ export const Route = createRootRouteWithContext<{
       { title: 'TanStack Start Starter' },
     ],
     links: [
-      { rel: 'stylesheet', href: indexCss },
+      { rel: 'stylesheet', href: appCss },
       {
         rel: 'icon',
         type: 'image/png',
@@ -52,9 +58,18 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <HeadContent />
       </head>
       <body>
+        <ScriptOnce>
+          {`document.documentElement.classList.toggle(
+            'dark',
+            localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+            )`}
+        </ScriptOnce>
+
         {children}
+
         <TanStackRouterDevtools position="bottom-right" />
         <ReactQueryDevtools buttonPosition="bottom-left" />
+
         <Scripts />
       </body>
     </html>
