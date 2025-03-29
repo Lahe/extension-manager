@@ -4,7 +4,7 @@ import axios from 'redaxios'
 
 import type { User } from '../utils/users'
 
-export const APIRoute = createAPIFileRoute('/api/users')({
+export const APIRoute = createAPIFileRoute('/old/api/users')({
   GET: async ({ request }) => {
     console.info('Fetching users... @', request.url)
     const res = await axios.get<User[]>('https://jsonplaceholder.typicode.com/users')

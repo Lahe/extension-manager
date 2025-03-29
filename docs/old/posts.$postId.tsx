@@ -1,4 +1,3 @@
-import { NotFound } from '@/components/NotFound'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   createFileRoute,
@@ -7,9 +6,10 @@ import {
   type ErrorComponentProps,
 } from '@tanstack/react-router'
 
+import { NotFound } from '../../src/components/errors/not-found.tsx'
 import { postQueryOptions } from '../utils/posts'
 
-export const Route = createFileRoute('/posts/$postId')({
+export const Route = createFileRoute('/old/posts/$postId')({
   loader: async ({ params: { postId }, context }) => {
     const data = await context.queryClient.ensureQueryData(postQueryOptions(postId))
 

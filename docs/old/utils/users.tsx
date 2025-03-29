@@ -1,7 +1,7 @@
 import { queryOptions } from '@tanstack/react-query'
 import axios from 'redaxios'
 
-export type User = {
+export interface User {
   id: number
   name: string
   email: string
@@ -14,8 +14,8 @@ export const usersQueryOptions = () =>
     queryKey: ['users'],
     queryFn: () =>
       axios
-        .get<Array<User>>(DEPLOY_URL + '/api/users')
-        .then((r) => r.data)
+        .get<User[]>(DEPLOY_URL + '/api/users')
+        .then(r => r.data)
         .catch(() => {
           throw new Error('Failed to fetch users')
         }),
@@ -27,7 +27,7 @@ export const userQueryOptions = (id: string) =>
     queryFn: () =>
       axios
         .get<User>(DEPLOY_URL + '/api/users/' + id)
-        .then((r) => r.data)
+        .then(r => r.data)
         .catch(() => {
           throw new Error('Failed to fetch user')
         }),
