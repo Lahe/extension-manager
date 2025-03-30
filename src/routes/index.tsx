@@ -1,5 +1,5 @@
-import ThemeToggle from '@/components/theme-toggle.tsx'
-import { Button } from '@/components/ui/button.tsx'
+import ThemeToggle from '@/components/theme-toggle'
+import { Button } from '@/components/ui/button'
 import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({

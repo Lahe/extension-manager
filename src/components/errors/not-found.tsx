@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button.tsx'
+import { Button } from '@/components/ui/button'
 import { Link } from '@tanstack/react-router'
 
 export function NotFound() {

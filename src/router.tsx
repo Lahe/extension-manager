@@ -1,5 +1,5 @@
-import { DefaultCatchBoundary } from '@/components/errors/default-catch-boundary.tsx'
-import { NotFound } from '@/components/errors/not-found.tsx'
+import { DefaultCatchBoundary } from '@/components/errors/default-catch-boundary'
+import { NotFound } from '@/components/errors/not-found'
 import { routeTree } from '@/routeTree.gen'
 import { QueryClient } from '@tanstack/react-query'
 import { createRouter as createTanStackRouter } from '@tanstack/react-router'
