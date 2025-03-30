@@ -1,5 +1,6 @@
 import { DefaultCatchBoundary } from '@/components/errors/default-catch-boundary.tsx'
 import { NotFound } from '@/components/errors/not-found.tsx'
+import { seo } from '@/lib/seo.ts'
 import appCss from '@/styles/app.css?url'
 import { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -20,7 +21,12 @@ export const Route = createRootRouteWithContext<{
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'TanStack Start Starter' },
+      ...seo({
+        title: 'Extension Manager',
+        description: 'Manage your browser extensions with ease.',
+        keywords:
+          'browser extension,manager,extension manager,browser extensions,extension manager,browser extension manager,browser extensions manager,tanstack start,tanstack,react,reactjs,react query,open source,open source software,oss,software',
+      }),
     ],
     links: [
       { rel: 'stylesheet', href: appCss },
