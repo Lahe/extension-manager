@@ -6,8 +6,8 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="bg-background w-full border-t py-6">
-      <div className="px-5">
+    <footer className="bg-background flex w-full justify-center border-t py-6">
+      <div className="container">
         {/* Main footer content */}
         <div className="grid grid-cols-1 gap-8 py-4 md:grid-cols-4">
           {/* Company/App info */}

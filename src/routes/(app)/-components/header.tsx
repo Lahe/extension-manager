@@ -11,8 +11,8 @@ import { Bell, HelpCircle, Search, Settings } from 'lucide-react'
 
 export function Header() {
   return (
-    <header className="bg-background/95 sticky top-0 z-50 w-full border-b backdrop-blur">
-      <div className="flex h-14 items-center justify-between px-5">
+    <header className="bg-background/95 sticky top-0 z-50 flex w-full justify-center border-b backdrop-blur">
+      <div className="container flex h-14 items-center justify-between">
         {/* Logo and App Name */}
         <div className="flex items-center gap-2">
           <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-md">
