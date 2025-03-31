@@ -1,25 +1,20 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 import { db } from '@/db/db'
-import { extensionsTable } from '@/db/schema'
-import { createInsertSchema } from 'drizzle-zod'
-import { z } from 'zod'
+import { CreateExtension, CreateExtensionSchema, Extensions } from '@/db/schema'
 
-const extensionInsertSchema = createInsertSchema(extensionsTable)
-type Extension = z.infer<typeof extensionInsertSchema>
-
-export async function seed() {
+async function seed() {
   // Path relative to "package.json"
   const dataPath = path.resolve(path.resolve(), './docs/data.json')
   const jsonData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'))
 
-  const data = jsonData.map((item: Extension) => ({
+  const data = jsonData.map((item: CreateExtension) => ({
     ...item,
     logo: item.logo.replace('./assets', '/assets'),
   }))
 
-  const validData = data.map((item: Extension) => {
-    const result = extensionInsertSchema.safeParse(item)
+  const validData = data.map((item: CreateExtension) => {
+    const result = CreateExtensionSchema.safeParse(item)
 
     if (!result.success) {
       console.error('Invalid data:', item)
@@ -29,11 +24,11 @@ export async function seed() {
     return result.data
   })
 
-  await db.insert(extensionsTable).values(validData)
+  await db.insert(Extensions).values(validData)
 }
 
-void seed()
-  .then(() => console.log('Seeded'))
+seed()
+  .then(() => console.log('Database seeded with extensions!'))
   .catch(e => {
     console.log(e)
     process.exit(1)
