@@ -7,3 +7,4 @@ coverage
 pnpm-lock.yaml
 routeTree.gen.ts
 **/.output
+docker-compose.yml
