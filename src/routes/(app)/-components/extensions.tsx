@@ -114,42 +114,44 @@ export function Extensions() {
         {filteredExtensions.map(extension => (
           <Card
             key={extension.id}
-            className="hover:border-primary/50 overflow-hidden border transition-colors"
+            className="hover:border-primary/50 gap-4 overflow-hidden border transition-colors"
           >
-            <CardHeader className="pb-2">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="text-2xl" aria-hidden="true">
-                    {extension.icon}
-                  </div>
-                  <CardTitle>{extension.name}</CardTitle>
+            <CardHeader>
+              <div className="flex gap-4">
+                <div className="text-5xl" aria-hidden="true">
+                  {extension.icon}
                 </div>
-                <Switch
-                  checked={extension.isActive}
-                  onCheckedChange={() => handleToggle(extension.id)}
-                  aria-label={`${extension.isActive ? 'Disable' : 'Enable'} ${extension.name}`}
-                />
+                <div className="flex flex-col gap-2">
+                  <CardTitle>{extension.name}</CardTitle>
+                  <CardDescription className="mt-1 line-clamp-2">
+                    {extension.description}
+                  </CardDescription>
+                </div>
               </div>
-              <CardDescription className="mt-1 line-clamp-2">
-                {extension.description}
-              </CardDescription>
             </CardHeader>
 
-            <CardContent className="pb-2">
-              <Badge variant={extension.isActive ? 'default' : 'outline'} className="mb-2 py-1">
+            <CardContent>
+              <Badge variant={extension.isActive ? 'default' : 'outline'} className="py-1">
                 {extension.category}
               </Badge>
             </CardContent>
 
             <CardFooter className="text-muted-foreground flex justify-between pt-0 text-sm">
-              <div className="flex items-center gap-1">
-                <Star className="h-4 w-4 text-amber-500" />
-                <span>{extension.rating}</span>
+              <div className="flex flex-row gap-2">
+                <div className="flex items-center gap-1">
+                  <Star className="h-4 w-4 text-amber-500" />
+                  <span>{extension.rating}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Download className="h-4 w-4" />
+                  <span>{extension.downloads}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <Download className="h-4 w-4" />
-                <span>{extension.downloads}</span>
-              </div>
+              <Switch
+                checked={extension.isActive}
+                onCheckedChange={() => handleToggle(extension.id)}
+                aria-label={`${extension.isActive ? 'Disable' : 'Enable'} ${extension.name}`}
+              />
             </CardFooter>
           </Card>
         ))}
