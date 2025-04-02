@@ -5,7 +5,7 @@ interface Category {
   color: string
 }
 
-export const Extensions = pgTable('extensions', {
+export const extensions = pgTable('extensions', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull(),
   description: text('description'),

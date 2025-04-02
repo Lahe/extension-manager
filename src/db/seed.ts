@@ -1,8 +1,8 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 import { db } from '@/db/db'
-import { Extensions } from '@/db/schema'
-import { CreateExtensionSchema, NewExtension } from '@/features/extensions/db/schema'
+import { extensions } from '@/db/schema'
+import { createExtensionSchema, NewExtension } from '@/features/extensions/db/schema'
 
 async function seed() {
   // Path relative to "package.json"
@@ -15,7 +15,7 @@ async function seed() {
   }))
 
   const validData = data.map((item: NewExtension) => {
-    const result = CreateExtensionSchema.safeParse(item)
+    const result = createExtensionSchema.safeParse(item)
 
     if (!result.success) {
       console.error('Invalid data:', item)
@@ -25,7 +25,7 @@ async function seed() {
     return result.data
   })
 
-  await db.insert(Extensions).values(validData)
+  await db.insert(extensions).values(validData)
 }
 
 seed()

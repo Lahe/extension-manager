@@ -1,13 +1,13 @@
 import { db } from '@/db/db'
-import { Extensions } from '@/db/schema'
+import { extensions } from '@/db/schema'
 import { Extension } from '@/features/extensions/db/schema'
 import { eq } from 'drizzle-orm'
 
 export async function getExtensions(): Promise<Extension[]> {
-  return db.select().from(Extensions)
+  return db.select().from(extensions)
 }
 
 export async function getExtensionById(id: number): Promise<Extension> {
-  const extension = await db.select().from(Extensions).where(eq(Extensions.id, id)).limit(1)
+  const extension = await db.select().from(extensions).where(eq(extensions.id, id)).limit(1)
   return extension[0]
 }
