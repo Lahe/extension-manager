@@ -9,74 +9,14 @@ import {
 } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { Download, Star } from 'lucide-react'
+import { extensionsQueryOptions } from '@/features/extensions/api/get-extensions'
+import { cn } from '@/utils/utils'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
-export function Extensions() {
+export function ExtensionList() {
+  const { data: extensions } = useSuspenseQuery(extensionsQueryOptions())
   const [filter, setFilter] = useState('all')
-
-  const extensions = [
-    {
-      id: 1,
-      name: 'Ad Blocker Pro',
-      description: 'Block intrusive ads and trackers while browsing',
-      rating: 4.7,
-      downloads: '2.5M',
-      isActive: true,
-      category: 'Privacy',
-      icon: '🛡️',
-    },
-    {
-      id: 2,
-      name: 'Dark Reader',
-      description: 'Dark mode for every website to protect your eyes',
-      rating: 4.8,
-      downloads: '5M',
-      isActive: true,
-      category: 'Accessibility',
-      icon: '🌙',
-    },
-    {
-      id: 3,
-      name: 'Grammar Checker',
-      description: 'Check spelling and grammar as you type',
-      rating: 4.3,
-      downloads: '1.2M',
-      isActive: false,
-      category: 'Productivity',
-      icon: '✓',
-    },
-    {
-      id: 4,
-      name: 'Password Manager',
-      description: 'Securely store and autofill your passwords',
-      rating: 4.9,
-      downloads: '3.8M',
-      isActive: true,
-      category: 'Security',
-      icon: '🔒',
-    },
-    {
-      id: 5,
-      name: 'Screenshot Tool',
-      description: 'Capture, annotate and share screenshots',
-      rating: 4.5,
-      downloads: '1.5M',
-      isActive: false,
-      category: 'Utility',
-      icon: '📸',
-    },
-    {
-      id: 6,
-      name: 'Translator',
-      description: 'Translate text on any webpage instantly',
-      rating: 4.6,
-      downloads: '4.2M',
-      isActive: true,
-      category: 'Language',
-      icon: '🌐',
-    },
-  ]
 
   // Filter extensions based on the selected filter
   const filteredExtensions = extensions.filter(extension => {
@@ -119,34 +59,32 @@ export function Extensions() {
             <CardHeader>
               <div className="flex gap-4">
                 <div className="text-5xl" aria-hidden="true">
-                  {extension.icon}
+                  <img src={extension.logo} alt={extension.name} />
                 </div>
                 <div className="flex flex-col gap-2">
                   <CardTitle>{extension.name}</CardTitle>
-                  <CardDescription className="mt-1 line-clamp-2">
-                    {extension.description}
-                  </CardDescription>
+                  {extension.description && (
+                    <CardDescription className="mt-1 line-clamp-2">
+                      {extension?.description}
+                    </CardDescription>
+                  )}
                 </div>
               </div>
             </CardHeader>
 
-            <CardContent>
-              <Badge variant={extension.isActive ? 'default' : 'outline'} className="py-1">
-                {extension.category}
-              </Badge>
+            <CardContent className="flex flex-wrap gap-1">
+              {extension.categories.map(category => (
+                <Badge
+                  key={category.name}
+                  variant={extension.isActive ? 'default' : 'outline'}
+                  className={cn('py-1', category.color)}
+                >
+                  {category.name}
+                </Badge>
+              ))}
             </CardContent>
 
-            <CardFooter className="text-muted-foreground flex justify-between pt-0 text-sm">
-              <div className="flex flex-row gap-2">
-                <div className="flex items-center gap-1">
-                  <Star className="h-4 w-4 text-amber-500" />
-                  <span>{extension.rating}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Download className="h-4 w-4" />
-                  <span>{extension.downloads}</span>
-                </div>
-              </div>
+            <CardFooter className="text-muted-foreground flex justify-end pt-0 text-sm">
               <Switch
                 checked={extension.isActive}
                 onCheckedChange={() => handleToggle(extension.id)}

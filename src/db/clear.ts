@@ -20,7 +20,10 @@ async function clear() {
 }
 
 clear()
-  .then(() => console.log('Database cleared'))
+  .then(() => {
+    console.log('Database cleared')
+    return
+  })
   .catch(e => {
     console.log(e)
     process.exit(1)

@@ -1,19 +1,15 @@
-import { boolean, integer, pgTable, text } from 'drizzle-orm/pg-core'
-import { createInsertSchema } from 'drizzle-zod'
-import { z } from 'zod'
+import { boolean, integer, jsonb, pgTable, text } from 'drizzle-orm/pg-core'
+
+interface Category {
+  name: string
+  color: string
+}
 
 export const Extensions = pgTable('extensions', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull(),
-  description: text('description').notNull(),
+  description: text('description'),
   logo: text('logo').notNull(),
-  isActive: boolean('is_active'),
-  categories: text('categories').array(),
+  isActive: boolean('is_active').notNull().default(false),
+  categories: jsonb('categories').$type<Category[]>().notNull().default([]),
 })
-
-export const CreateExtensionSchema = createInsertSchema(Extensions, {
-  name: z.string({ required_error: 'Name is required' }),
-  description: z.string({ required_error: 'Description is required' }),
-  logo: z.string({ required_error: 'Logo path is required' }),
-})
-export type CreateExtension = z.infer<typeof CreateExtensionSchema>

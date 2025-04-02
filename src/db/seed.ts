@@ -1,19 +1,20 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 import { db } from '@/db/db'
-import { CreateExtension, CreateExtensionSchema, Extensions } from '@/db/schema'
+import { Extensions } from '@/db/schema'
+import { CreateExtensionSchema, NewExtension } from '@/features/extensions/db/schema'
 
 async function seed() {
   // Path relative to "package.json"
   const dataPath = path.resolve(path.resolve(), './docs/data.json')
   const jsonData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'))
 
-  const data = jsonData.map((item: CreateExtension) => ({
+  const data = jsonData.map((item: NewExtension) => ({
     ...item,
     logo: item.logo.replace('./assets', '/assets'),
   }))
 
-  const validData = data.map((item: CreateExtension) => {
+  const validData = data.map((item: NewExtension) => {
     const result = CreateExtensionSchema.safeParse(item)
 
     if (!result.success) {
@@ -28,7 +29,10 @@ async function seed() {
 }
 
 seed()
-  .then(() => console.log('Database seeded with extensions!'))
+  .then(() => {
+    console.log('Database seeded with extensions!')
+    return
+  })
   .catch(e => {
     console.log(e)
     process.exit(1)

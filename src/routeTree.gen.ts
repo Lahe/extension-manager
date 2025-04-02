@@ -11,17 +11,10 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as LoginImport } from './routes/login'
 import { Route as appRouteImport } from './routes/(app)/route'
 import { Route as appIndexImport } from './routes/(app)/index'
 
 // Create/Update Routes
-
-const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const appRouteRoute = appRouteImport.update({
   id: '/(app)',
@@ -43,13 +36,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof appRouteImport
-      parentRoute: typeof rootRoute
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
     '/(app)/': {
@@ -78,38 +64,33 @@ const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof appIndexRoute
-  '/login': typeof LoginRoute
 }
 
 export interface FileRoutesByTo {
-  '/login': typeof LoginRoute
   '/': typeof appIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/(app)': typeof appRouteRouteWithChildren
-  '/login': typeof LoginRoute
   '/(app)/': typeof appIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/'
-  id: '__root__' | '/(app)' | '/login' | '/(app)/'
+  to: '/'
+  id: '__root__' | '/(app)' | '/(app)/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   appRouteRoute: typeof appRouteRouteWithChildren
-  LoginRoute: typeof LoginRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   appRouteRoute: appRouteRouteWithChildren,
-  LoginRoute: LoginRoute,
 }
 
 export const routeTree = rootRoute
@@ -122,8 +103,7 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/(app)",
-        "/login"
+        "/(app)"
       ]
     },
     "/(app)": {
@@ -131,9 +111,6 @@ export const routeTree = rootRoute
       "children": [
         "/(app)/"
       ]
-    },
-    "/login": {
-      "filePath": "login.tsx"
     },
     "/(app)/": {
       "filePath": "(app)/index.tsx",
