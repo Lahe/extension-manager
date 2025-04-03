@@ -63,13 +63,13 @@ export function ExtensionList() {
           >
             <CardHeader>
               <div className="flex gap-4">
-                <div className="text-5xl" aria-hidden="true">
-                  <img src={extension.logo} alt={extension.name} />
+                <div className="shrink-0 text-5xl" aria-hidden="true">
+                  <img src={extension.logo} alt={extension.name} className="h-12 w-12" />
                 </div>
                 <div className="flex flex-col gap-2">
                   <CardTitle>{extension.name}</CardTitle>
                   {extension.description && (
-                    <CardDescription className="mt-1 line-clamp-2">
+                    <CardDescription className="mt-1 line-clamp-2 min-h-10">
                       {extension?.description}
                     </CardDescription>
                   )}
@@ -85,7 +85,7 @@ export function ExtensionList() {
               ))}
             </CardContent>
 
-            <CardFooter className="text-muted-foreground flex justify-end pt-0 text-sm">
+            <CardFooter className="text-muted-foreground mt-auto flex justify-end pt-0 text-sm">
               <Switch
                 checked={extension.isActive}
                 onCheckedChange={() => handleToggle(extension)}
