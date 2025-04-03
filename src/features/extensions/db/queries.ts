@@ -4,7 +4,7 @@ import { Extension } from '@/features/extensions/db/schema'
 import { eq } from 'drizzle-orm'
 
 export async function getExtensions(): Promise<Extension[]> {
-  return db.select().from(extensions)
+  return db.select().from(extensions).orderBy(extensions.id)
 }
 
 export async function getExtensionById(id: number): Promise<Extension> {

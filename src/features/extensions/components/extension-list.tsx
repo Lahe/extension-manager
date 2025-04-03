@@ -10,12 +10,15 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { extensionsQueryOptions } from '@/features/extensions/api/get-extensions'
+import { useToggleExtensionMutation } from '@/features/extensions/api/update-extension'
+import { Extension } from '@/features/extensions/db/schema'
 import { cn } from '@/utils/utils'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 export function ExtensionList() {
   const { data: extensions } = useSuspenseQuery(extensionsQueryOptions())
+  const { mutate: toggleExtension, isPending } = useToggleExtensionMutation()
   const [filter, setFilter] = useState('all')
 
   // Filter extensions based on the selected filter
@@ -26,9 +29,11 @@ export function ExtensionList() {
     return true
   })
 
-  const handleToggle = (id: number) => {
-    // This would update the state in a real application
-    console.log(`Toggled extension ${id}`)
+  const handleToggle = (extension: Extension) => {
+    toggleExtension({
+      id: extension.id,
+      isActive: !extension.isActive,
+    })
   }
 
   return (
@@ -74,11 +79,7 @@ export function ExtensionList() {
 
             <CardContent className="flex flex-wrap gap-1">
               {extension.categories.map(category => (
-                <Badge
-                  key={category.name}
-                  variant={extension.isActive ? 'default' : 'outline'}
-                  className={cn('py-1', category.color)}
-                >
+                <Badge key={category.name} className={cn('text-foreground py-1', category.color)}>
                   {category.name}
                 </Badge>
               ))}
@@ -87,7 +88,8 @@ export function ExtensionList() {
             <CardFooter className="text-muted-foreground flex justify-end pt-0 text-sm">
               <Switch
                 checked={extension.isActive}
-                onCheckedChange={() => handleToggle(extension.id)}
+                onCheckedChange={() => handleToggle(extension)}
+                disabled={isPending}
                 aria-label={`${extension.isActive ? 'Disable' : 'Enable'} ${extension.name}`}
               />
             </CardFooter>

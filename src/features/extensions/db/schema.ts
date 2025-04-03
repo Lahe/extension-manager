@@ -11,5 +11,13 @@ export const createExtensionSchema = createInsertSchema(extensions, {
   logo: z.string({ required_error: 'Logo path is required' }),
   categories: z.array(z.object({ name: z.string(), color: z.string() })),
 })
-export type NewExtension = z.infer<typeof CreateExtensionSchema>
 export type NewExtension = z.infer<typeof createExtensionSchema>
+
+export const updateExtensionSchema = createUpdateSchema(extensions)
+export type UpdateExtension = z.infer<typeof updateExtensionSchema>
+
+export const toggleExtensionInputSchema = z.object({
+  id: z.number().int().positive(),
+  isActive: z.boolean(),
+})
+export type ToggleExtensionStatus = z.infer<typeof toggleExtensionInputSchema>
