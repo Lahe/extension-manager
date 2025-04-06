@@ -23,6 +23,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "forceConsistentCasingInFileNames": true,
+    "strictNullChecks": true,
 
     /* Path aliases */
     "baseUrl": ".",

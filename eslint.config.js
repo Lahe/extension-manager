@@ -9,9 +9,7 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  {
-    ignores: ['**/dist/*', '**/node_modules/*', '**/build/*'],
-  },
+  { ignores: ['**/dist/*', '**/node_modules/*', '**/build/*'] },
   { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -24,6 +22,9 @@ export default tseslint.config(
   reactRefresh.configs.recommended,
   {
     name: 'main',
+    rules: {
+      '@typescript-eslint/no-empty-object-type': 'off',
+    },
     languageOptions: {
       ecmaVersion: 2022,
       parser: tseslint.parser,

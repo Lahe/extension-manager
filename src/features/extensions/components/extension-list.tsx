@@ -22,7 +22,7 @@ export function ExtensionList() {
   const [filter, setFilter] = useState('all')
 
   // Filter extensions based on the selected filter
-  const filteredExtensions = extensions.filter(extension => {
+  const filteredExtensions = extensions.filter((extension: Extension) => {
     if (filter === 'all') return true
     if (filter === 'active') return extension.isActive
     if (filter === 'inactive') return !extension.isActive

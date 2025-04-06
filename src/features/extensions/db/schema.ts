@@ -3,7 +3,7 @@ import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'driz
 import { z } from 'zod'
 
 export const extensionSelectSchema = createSelectSchema(extensions)
-export type Extension = z.infer<typeof extensionSelectSchema>
+export interface Extension extends z.infer<typeof extensionSelectSchema> {}
 
 export const createExtensionSchema = createInsertSchema(extensions, {
   name: z.string({ required_error: 'Name is required' }),
@@ -11,13 +11,13 @@ export const createExtensionSchema = createInsertSchema(extensions, {
   logo: z.string({ required_error: 'Logo path is required' }),
   categories: z.array(z.object({ name: z.string(), color: z.string() })),
 })
-export type NewExtension = z.infer<typeof createExtensionSchema>
+export interface NewExtension extends z.infer<typeof createExtensionSchema> {}
 
 export const updateExtensionSchema = createUpdateSchema(extensions)
-export type UpdateExtension = z.infer<typeof updateExtensionSchema>
+export interface UpdateExtension extends z.infer<typeof updateExtensionSchema> {}
 
 export const toggleExtensionInputSchema = z.object({
   id: z.number().int().positive(),
   isActive: z.boolean(),
 })
-export type ToggleExtensionStatus = z.infer<typeof toggleExtensionInputSchema>
+export interface ToggleExtensionStatus extends z.infer<typeof toggleExtensionInputSchema> {}
