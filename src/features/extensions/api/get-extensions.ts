@@ -1,10 +1,10 @@
-import { getExtensionById, getExtensions } from '@/features/extensions/db/queries'
+import { getCategories, getExtensionsWithCategories } from '@/features/extensions/db/queries'
 import { queryOptions } from '@tanstack/react-query'
 import { createServerFn } from '@tanstack/react-start'
 
 export const fetchExtensions = createServerFn({ method: 'GET' }).handler(async () => {
   console.info('Fetching extensions')
-  return getExtensions()
+  return getExtensionsWithCategories()
 })
 
 export const extensionsQueryOptions = () =>
@@ -13,15 +13,12 @@ export const extensionsQueryOptions = () =>
     queryFn: fetchExtensions,
   })
 
-export const fetchExtension = createServerFn({ method: 'GET' })
-  .validator((id: number) => id)
-  .handler(async ({ data: id }) => {
-    console.info('Fetching extension with id', id)
-    return getExtensionById(id)
-  })
+export const fetchCategories = createServerFn({ method: 'GET' }).handler(async () => {
+  return getCategories()
+})
 
-export const extensionQueryOptions = (id: number) =>
+export const categoriesQueryOptions = () =>
   queryOptions({
-    queryKey: ['extension', id],
-    queryFn: () => fetchExtension({ data: id }),
+    queryKey: ['categories'],
+    queryFn: fetchCategories,
   })

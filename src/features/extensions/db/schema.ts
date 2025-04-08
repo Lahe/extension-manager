@@ -1,23 +1,40 @@
-import { extensions } from '@/db/schema'
+import { categories, extensions } from '@/db/schema'
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod'
 import { z } from 'zod'
 
-export const extensionSelectSchema = createSelectSchema(extensions)
-export interface Extension extends z.infer<typeof extensionSelectSchema> {}
+// SELECT
 
-export const createExtensionSchema = createInsertSchema(extensions, {
-  name: z.string({ required_error: 'Name is required' }),
-  description: z.string({ required_error: 'Description is required' }),
-  logo: z.string({ required_error: 'Logo path is required' }),
-  categories: z.array(z.object({ name: z.string(), color: z.string() })),
+const selectCategoriesSchema = createSelectSchema(categories)
+const selectExtensionsSchema = createSelectSchema(extensions)
+const selectExtensionCategories = z.object({
+  categories: selectCategoriesSchema.array().default([]),
 })
-export interface NewExtension extends z.infer<typeof createExtensionSchema> {}
+export const selectExtensionsWithCategories =
+  selectExtensionsSchema.merge(selectExtensionCategories)
 
+export interface Category extends z.infer<typeof selectCategoriesSchema> {}
+export interface ExtensionWithCategories extends z.infer<typeof selectExtensionsWithCategories> {}
+
+// INSERT
+export const createExtensionSchema = createInsertSchema(extensions)
+export const createCategoriesSchema = createInsertSchema(categories)
+const createExtensionCategories = z.object({
+  categories: createCategoriesSchema.array().default([]),
+})
+export const createExtensionWithCategories = createExtensionSchema
+  .merge(createExtensionCategories)
+  .omit({
+    isActive: true,
+  })
+
+export interface NewExtension extends z.infer<typeof createExtensionWithCategories> {}
+
+// UPDATE
 export const updateExtensionSchema = createUpdateSchema(extensions)
 export interface UpdateExtension extends z.infer<typeof updateExtensionSchema> {}
 
-export const toggleExtensionInputSchema = z.object({
-  id: z.number().int().positive(),
-  isActive: z.boolean(),
+export const toggleExtensionInputSchema = selectExtensionsSchema.pick({
+  id: true,
+  isActive: true,
 })
 export interface ToggleExtensionStatus extends z.infer<typeof toggleExtensionInputSchema> {}

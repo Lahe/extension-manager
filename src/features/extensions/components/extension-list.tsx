@@ -11,9 +11,10 @@ import { Switch } from '@/components/ui/switch'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { extensionsQueryOptions } from '@/features/extensions/api/get-extensions'
 import { useToggleExtensionMutation } from '@/features/extensions/api/update-extension'
-import { Extension } from '@/features/extensions/db/schema'
+import { Category, ExtensionWithCategories } from '@/features/extensions/db/schema'
 import { cn } from '@/utils/utils'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 
 export function ExtensionList() {
@@ -22,14 +23,14 @@ export function ExtensionList() {
   const [filter, setFilter] = useState('all')
 
   // Filter extensions based on the selected filter
-  const filteredExtensions = extensions.filter((extension: Extension) => {
+  const filteredExtensions = extensions.filter((extension: ExtensionWithCategories) => {
     if (filter === 'all') return true
     if (filter === 'active') return extension.isActive
     if (filter === 'inactive') return !extension.isActive
     return true
   })
 
-  const handleToggle = (extension: Extension) => {
+  const handleToggle = (extension: ExtensionWithCategories) => {
     toggleExtension({
       id: extension.id,
       isActive: !extension.isActive,
@@ -57,43 +58,55 @@ export function ExtensionList() {
       {/* Extensions grid */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredExtensions.map(extension => (
-          <Card
+          <Link
             key={extension.id}
-            className="hover:border-primary/50 gap-4 overflow-hidden border transition-colors"
+            to="/extensions/$extId"
+            params={{
+              extId: extension.id,
+            }}
           >
-            <CardHeader>
-              <div className="flex gap-4">
-                <div className="shrink-0 text-5xl" aria-hidden="true">
-                  <img src={extension.logo} alt={extension.name} className="h-12 w-12" />
+            <Card
+              key={extension.id}
+              className="hover:border-primary/50 gap-4 overflow-hidden border transition-colors"
+            >
+              <CardHeader>
+                <div className="flex gap-4">
+                  <div className="shrink-0 text-5xl" aria-hidden="true">
+                    <img
+                      src={extension.logo}
+                      alt={extension.name}
+                      className="h-12 w-12 object-contain"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <CardTitle>{extension.name}</CardTitle>
+                    {extension.description && (
+                      <CardDescription className="mt-1 line-clamp-2 min-h-10">
+                        {extension?.description}
+                      </CardDescription>
+                    )}
+                  </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <CardTitle>{extension.name}</CardTitle>
-                  {extension.description && (
-                    <CardDescription className="mt-1 line-clamp-2 min-h-10">
-                      {extension?.description}
-                    </CardDescription>
-                  )}
-                </div>
-              </div>
-            </CardHeader>
+              </CardHeader>
 
-            <CardContent className="flex flex-wrap gap-1">
-              {extension.categories.map(category => (
-                <Badge key={category.name} className={cn('text-foreground py-1', category.color)}>
-                  {category.name}
-                </Badge>
-              ))}
-            </CardContent>
+              <CardContent className="flex flex-wrap gap-1">
+                {extension.categories.map((category: Category) => (
+                  <Badge key={category.name} className={cn('text-foreground py-1', category.color)}>
+                    {category.name}
+                  </Badge>
+                ))}
+              </CardContent>
 
-            <CardFooter className="text-muted-foreground mt-auto flex justify-end pt-0 text-sm">
-              <Switch
-                checked={extension.isActive}
-                onCheckedChange={() => handleToggle(extension)}
-                disabled={isPending}
-                aria-label={`${extension.isActive ? 'Disable' : 'Enable'} ${extension.name}`}
-              />
-            </CardFooter>
-          </Card>
+              <CardFooter className="text-muted-foreground mt-auto flex justify-end pt-0 text-sm">
+                <Switch
+                  checked={extension.isActive}
+                  onCheckedChange={() => handleToggle(extension)}
+                  disabled={isPending}
+                  aria-label={`${extension.isActive ? 'Disable' : 'Enable'} ${extension.name}`}
+                />
+              </CardFooter>
+            </Card>
+          </Link>
         ))}
       </div>
 
