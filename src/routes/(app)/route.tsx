@@ -10,7 +10,9 @@ function AppLayout() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-      <Outlet />
+      <main className="flex flex-grow justify-center">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   )

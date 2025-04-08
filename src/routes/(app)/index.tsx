@@ -13,9 +13,5 @@ export const Route = createFileRoute('/(app)/')({
 })
 
 function ExtensionsPage() {
-  return (
-    <main className="flex flex-grow justify-center">
-      <ExtensionList />
-    </main>
-  )
+  return <ExtensionList />
 }
