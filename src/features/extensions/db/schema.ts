@@ -3,7 +3,6 @@ import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'driz
 import { z } from 'zod'
 
 // SELECT
-
 const selectCategoriesSchema = createSelectSchema(categories)
 const selectExtensionsSchema = createSelectSchema(extensions)
 const selectExtensionCategories = z.object({
@@ -27,6 +26,7 @@ export const createExtensionWithCategories = createExtensionSchema
     isActive: true,
   })
 
+export interface NewCategory extends z.infer<typeof createCategoriesSchema> {}
 export interface NewExtension extends z.infer<typeof createExtensionWithCategories> {}
 
 // UPDATE

@@ -2,19 +2,7 @@ import * as fs from 'node:fs'
 import * as path from 'node:path'
 import { db } from '@/db/db'
 import { categories, extensions, extensionsToCategories } from '@/db/schema'
-import { createExtensionSchema } from '@/features/extensions/db/schema'
-
-interface InputCategory {
-  name: string
-  color: string
-}
-interface InputExtension {
-  logo: string
-  name: string
-  description?: string | null // Make optional fields nullable if needed
-  isActive: boolean
-  categories: InputCategory[]
-}
+import { createExtensionSchema, NewCategory, NewExtension } from '@/features/extensions/db/schema'
 
 async function seed() {
   // Path relative to "package.json"
@@ -22,8 +10,8 @@ async function seed() {
   const jsonData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'))
 
   const uniqueCategoriesMap = new Map<string, { name: string; color: string }>()
-  jsonData.forEach((item: InputExtension) => {
-    item.categories.forEach((category: InputCategory) => {
+  jsonData.forEach((item: NewExtension) => {
+    item.categories.forEach((category: NewCategory) => {
       const existingCategory = uniqueCategoriesMap.get(category.name)
       if (!existingCategory) {
         uniqueCategoriesMap.set(category.name, category)
@@ -65,7 +53,7 @@ async function seed() {
         throw new Error(`Failed to insert extension: ${item.name}`)
       }
 
-      item.categories.forEach((category: InputCategory) => {
+      item.categories.forEach((category: NewCategory) => {
         const categoryId = categoryIdMap.get(category.name)
         if (categoryId) {
           joinTableEntries.push({ extensionId: insertedExtension.id, categoryId: categoryId })

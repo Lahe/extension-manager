@@ -25,7 +25,8 @@ export function ExtensionView({ id }: ExtensionViewProps) {
         <h2 className="text-2xl font-bold">Extension Details</h2>
         <Link to="/extensions/$extId/edit" params={{ extId: id }}>
           <Button variant="outline">
-            <Pencil className="mr-2 h-4 w-4" /> Edit
+            <Pencil className="mr-2 h-4 w-4" />
+            Edit
           </Button>
         </Link>
       </div>

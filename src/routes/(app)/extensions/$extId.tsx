@@ -1,3 +1,4 @@
+import { extensionQueryOptions } from '@/features/extensions/api/get-extension'
 import { ExtensionView } from '@/features/extensions/components/extension-view'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { z } from 'zod'
@@ -16,6 +17,9 @@ export const Route = createFileRoute('/(app)/extensions/$extId')({
         throw notFound()
       }
     },
+  },
+  loader: async ({ params, context }) => {
+    await context.queryClient.ensureQueryData(extensionQueryOptions(params.extId))
   },
   notFoundComponent: () => <div>Extension not found!</div>,
 })
