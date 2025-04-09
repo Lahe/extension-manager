@@ -14,9 +14,7 @@ export function CreateExtension() {
   const handleSubmit = (extension: NewExtension) => {
     createExtension(extension, {
       onSuccess: createdExtension => {
-        toast.success('Success', {
-          description: `Extension "${createdExtension.name}" created successfully.`,
-        })
+        toast.success(`Extension "${createdExtension.name}" created successfully.`)
         navigate({
           to: '/extensions/$extId',
           params: { extId: createdExtension.id },
@@ -24,7 +22,7 @@ export function CreateExtension() {
         })
       },
       onError: (error: Error) => {
-        toast.error('Error Creating Extension', {
+        toast.error('Error creating extension', {
           description: error.message || 'An unknown error occurred.',
         })
       },

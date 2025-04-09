@@ -76,7 +76,7 @@ export function ExtensionList() {
           >
             <Card
               key={extension.id}
-              className="hover:border-primary/50 gap-4 overflow-hidden border transition-colors"
+              className="hover:border-primary/50 h-full gap-4 overflow-hidden border transition-colors"
             >
               <CardHeader>
                 <div className="flex gap-4">
