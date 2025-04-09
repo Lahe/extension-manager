@@ -84,7 +84,9 @@ export function ExtensionForm<T extends ZodTypeAny, TFormData extends z.infer<T>
           name={'name' as Path<TFormData>}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name *</FormLabel>
+              <FormLabel className="gap-1">
+                Name <span className="text-destructive">*</span>
+              </FormLabel>
               <FormControl>
                 <Input placeholder="My Awesome Extension" {...field} />
               </FormControl>
@@ -114,7 +116,9 @@ export function ExtensionForm<T extends ZodTypeAny, TFormData extends z.infer<T>
           name={'logo' as Path<TFormData>}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Logo URL *</FormLabel>
+              <FormLabel className="gap-1">
+                Logo URL <span className="text-destructive">*</span>
+              </FormLabel>
               <FormControl>
                 <Input placeholder="https://example.com/logo.png" {...field} />
               </FormControl>
