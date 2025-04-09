@@ -62,6 +62,23 @@ export function ExtensionForm<T extends ZodTypeAny, TFormData extends z.infer<T>
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
+        {isUpdateForm && (
+          <FormField
+            control={form.control}
+            // Assertion is safe because of the conditional render check above
+            name={'id' as Path<TFormData>}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>ID</FormLabel>
+                <FormControl>
+                  <Input {...field} readOnly disabled className="bg-muted" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         <FormField
           control={form.control}
           name={'name' as Path<TFormData>}
@@ -126,6 +143,26 @@ export function ExtensionForm<T extends ZodTypeAny, TFormData extends z.infer<T>
             </FormItem>
           )}
         />
+
+        {isUpdateForm && (
+          <FormField
+            control={form.control}
+            name={'isActive' as Path<TFormData>}
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">Active</FormLabel>
+                  <FormDescription>
+                    Is this extension currently active and available?
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Checkbox checked={field.value ?? false} onCheckedChange={field.onChange} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        )}
 
         <Button type="submit" disabled={isLoading}>
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
