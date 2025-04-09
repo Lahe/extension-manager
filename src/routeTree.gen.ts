@@ -13,6 +13,9 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as appRouteImport } from './routes/(app)/route'
 import { Route as appIndexImport } from './routes/(app)/index'
+import { Route as appExtensionsNewImport } from './routes/(app)/extensions/new'
+import { Route as appExtensionsExtIdImport } from './routes/(app)/extensions/$extId'
+import { Route as appExtensionsExtIdEditImport } from './routes/(app)/extensions/$extId.edit'
 
 // Create/Update Routes
 
@@ -25,6 +28,24 @@ const appIndexRoute = appIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => appRouteRoute,
+} as any)
+
+const appExtensionsNewRoute = appExtensionsNewImport.update({
+  id: '/extensions/new',
+  path: '/extensions/new',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appExtensionsExtIdRoute = appExtensionsExtIdImport.update({
+  id: '/extensions/$extId',
+  path: '/extensions/$extId',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appExtensionsExtIdEditRoute = appExtensionsExtIdEditImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => appExtensionsExtIdRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -45,17 +66,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appIndexImport
       parentRoute: typeof appRouteImport
     }
+    '/(app)/extensions/$extId': {
+      id: '/(app)/extensions/$extId'
+      path: '/extensions/$extId'
+      fullPath: '/extensions/$extId'
+      preLoaderRoute: typeof appExtensionsExtIdImport
+      parentRoute: typeof appRouteImport
+    }
+    '/(app)/extensions/new': {
+      id: '/(app)/extensions/new'
+      path: '/extensions/new'
+      fullPath: '/extensions/new'
+      preLoaderRoute: typeof appExtensionsNewImport
+      parentRoute: typeof appRouteImport
+    }
+    '/(app)/extensions/$extId/edit': {
+      id: '/(app)/extensions/$extId/edit'
+      path: '/edit'
+      fullPath: '/extensions/$extId/edit'
+      preLoaderRoute: typeof appExtensionsExtIdEditImport
+      parentRoute: typeof appExtensionsExtIdImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface appExtensionsExtIdRouteChildren {
+  appExtensionsExtIdEditRoute: typeof appExtensionsExtIdEditRoute
+}
+
+const appExtensionsExtIdRouteChildren: appExtensionsExtIdRouteChildren = {
+  appExtensionsExtIdEditRoute: appExtensionsExtIdEditRoute,
+}
+
+const appExtensionsExtIdRouteWithChildren =
+  appExtensionsExtIdRoute._addFileChildren(appExtensionsExtIdRouteChildren)
+
 interface appRouteRouteChildren {
   appIndexRoute: typeof appIndexRoute
+  appExtensionsExtIdRoute: typeof appExtensionsExtIdRouteWithChildren
+  appExtensionsNewRoute: typeof appExtensionsNewRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
   appIndexRoute: appIndexRoute,
+  appExtensionsExtIdRoute: appExtensionsExtIdRouteWithChildren,
+  appExtensionsNewRoute: appExtensionsNewRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
@@ -64,24 +121,43 @@ const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof appIndexRoute
+  '/extensions/$extId': typeof appExtensionsExtIdRouteWithChildren
+  '/extensions/new': typeof appExtensionsNewRoute
+  '/extensions/$extId/edit': typeof appExtensionsExtIdEditRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof appIndexRoute
+  '/extensions/$extId': typeof appExtensionsExtIdRouteWithChildren
+  '/extensions/new': typeof appExtensionsNewRoute
+  '/extensions/$extId/edit': typeof appExtensionsExtIdEditRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/(app)': typeof appRouteRouteWithChildren
   '/(app)/': typeof appIndexRoute
+  '/(app)/extensions/$extId': typeof appExtensionsExtIdRouteWithChildren
+  '/(app)/extensions/new': typeof appExtensionsNewRoute
+  '/(app)/extensions/$extId/edit': typeof appExtensionsExtIdEditRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/extensions/$extId'
+    | '/extensions/new'
+    | '/extensions/$extId/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/(app)' | '/(app)/'
+  to: '/' | '/extensions/$extId' | '/extensions/new' | '/extensions/$extId/edit'
+  id:
+    | '__root__'
+    | '/(app)'
+    | '/(app)/'
+    | '/(app)/extensions/$extId'
+    | '/(app)/extensions/new'
+    | '/(app)/extensions/$extId/edit'
   fileRoutesById: FileRoutesById
 }
 
@@ -109,12 +185,29 @@ export const routeTree = rootRoute
     "/(app)": {
       "filePath": "(app)/route.tsx",
       "children": [
-        "/(app)/"
+        "/(app)/",
+        "/(app)/extensions/$extId",
+        "/(app)/extensions/new"
       ]
     },
     "/(app)/": {
       "filePath": "(app)/index.tsx",
       "parent": "/(app)"
+    },
+    "/(app)/extensions/$extId": {
+      "filePath": "(app)/extensions/$extId.tsx",
+      "parent": "/(app)",
+      "children": [
+        "/(app)/extensions/$extId/edit"
+      ]
+    },
+    "/(app)/extensions/new": {
+      "filePath": "(app)/extensions/new.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/extensions/$extId/edit": {
+      "filePath": "(app)/extensions/$extId.edit.tsx",
+      "parent": "/(app)/extensions/$extId"
     }
   }
 }

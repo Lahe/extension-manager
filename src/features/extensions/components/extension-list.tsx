@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -15,6 +16,7 @@ import { Category, ExtensionWithCategories } from '@/features/extensions/db/sche
 import { cn } from '@/utils/utils'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
+import { PlusCircle } from 'lucide-react'
 import { useState } from 'react'
 
 export function ExtensionList() {
@@ -42,17 +44,24 @@ export function ExtensionList() {
       {/* Header with title and filter buttons */}
       <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <h2 className="text-2xl font-bold">Extensions List</h2>
-
-        <ToggleGroup
-          type="single"
-          value={filter}
-          onValueChange={value => value && setFilter(value)}
-          className="*:border-secondary *:border *:px-3 *:py-2"
-        >
-          <ToggleGroupItem value="all">All</ToggleGroupItem>
-          <ToggleGroupItem value="active">Active</ToggleGroupItem>
-          <ToggleGroupItem value="inactive">Inactive</ToggleGroupItem>
-        </ToggleGroup>
+        <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
+          <ToggleGroup
+            type="single"
+            value={filter}
+            onValueChange={value => value && setFilter(value)}
+            className="*:border-secondary *:border *:px-3 *:py-2"
+          >
+            <ToggleGroupItem value="all">All</ToggleGroupItem>
+            <ToggleGroupItem value="active">Active</ToggleGroupItem>
+            <ToggleGroupItem value="inactive">Inactive</ToggleGroupItem>
+          </ToggleGroup>
+          <Link to="/extensions/new">
+            <Button>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              New Extension
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Extensions grid */}
@@ -98,12 +107,17 @@ export function ExtensionList() {
               </CardContent>
 
               <CardFooter className="text-muted-foreground mt-auto flex justify-end pt-0 text-sm">
-                <Switch
-                  checked={extension.isActive}
-                  onCheckedChange={() => handleToggle(extension)}
-                  disabled={isPending}
-                  aria-label={`${extension.isActive ? 'Disable' : 'Enable'} ${extension.name}`}
-                />
+                <div onClick={e => e.preventDefault()} className="flex items-center space-x-2">
+                  <span className="text-muted-foreground text-sm">
+                    {extension.isActive ? 'Active' : 'Inactive'}
+                  </span>
+                  <Switch
+                    checked={extension.isActive}
+                    onCheckedChange={() => handleToggle(extension)}
+                    disabled={isPending}
+                    aria-label={`${extension.isActive ? 'Disable' : 'Enable'} ${extension.name}`}
+                  />
+                </div>
               </CardFooter>
             </Card>
           </Link>
