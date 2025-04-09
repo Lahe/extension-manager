@@ -28,7 +28,7 @@ export async function insertExtension(extension: NewExtension): Promise<Extensio
   const result = await getExtensionWithCategoriesById(newExtension)
 
   if (!result) {
-    throw new Error('Failed to insert extension')
+    throw new Error(`Failed to fetch inserted extension with id ${newExtension}.`)
   }
 
   return result

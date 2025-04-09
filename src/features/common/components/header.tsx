@@ -7,6 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
+import { Link } from '@tanstack/react-router'
 import { Bell, HelpCircle, Search, Settings } from 'lucide-react'
 
 export function Header() {
@@ -14,12 +15,14 @@ export function Header() {
     <header className="bg-background/95 sticky top-0 z-50 flex w-full justify-center border-b backdrop-blur">
       <div className="container flex h-14 items-center justify-between">
         {/* Logo and App Name */}
-        <div className="flex items-center gap-2">
-          <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-md">
-            <span className="text-primary-foreground font-bold">EX</span>
+        <Link to="/">
+          <div className="flex items-center gap-2">
+            <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-md">
+              <span className="text-primary-foreground font-bold">EX</span>
+            </div>
+            <span className="text-lg font-semibold">Extensions Hub</span>
           </div>
-          <span className="text-lg font-semibold">Extensions Hub</span>
-        </div>
+        </Link>
 
         {/* Search Bar */}
         <div className="relative hidden w-1/3 md:flex">

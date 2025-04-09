@@ -1,10 +1,13 @@
+import { extensionQueryOptions } from '@/features/extensions/api/get-extension'
 import { extensionsQueryOptions } from '@/features/extensions/api/get-extensions'
-import { updateExtensionStatus } from '@/features/extensions/db/mutations'
 import {
   ExtensionWithCategories,
   toggleExtensionInputSchema,
   ToggleExtensionStatus,
+  UpdateExtensionForm,
+  updateExtensionFormSchema,
 } from '@/features/extensions/db/schema'
+import { updateExtensionById, updateExtensionStatus } from '@/features/extensions/db/updates'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createServerFn } from '@tanstack/react-start'
 
@@ -47,5 +50,31 @@ export const useToggleExtensionMutation = () => {
       }
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
+  })
+}
+
+export const updateExtension = createServerFn({ method: 'POST' })
+  .validator(updateExtensionFormSchema)
+  .handler(async ({ data }) => {
+    try {
+      const { id, ...extensionData } = data
+      return await updateExtensionById(id, extensionData)
+    } catch (error) {
+      console.error('Error during DB operation in updateExtension:', error)
+      const message = error instanceof Error ? error.message : 'An unknown error occurred.'
+      throw new Error(`Failed to update extension. ${message}`)
+    }
+  })
+
+export const useUpdateExtensionMutation = (id: number) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (input: UpdateExtensionForm) => updateExtension({ data: input }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: extensionQueryOptions(id).queryKey }),
+    onError: err => {
+      console.error(err.message)
+    },
   })
 }

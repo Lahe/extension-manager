@@ -34,11 +34,13 @@ export function ExtensionView({ id }: ExtensionViewProps) {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-4">
-            <img
-              src={extension.logo}
-              alt={extension.name}
-              className="h-16 w-16 rounded-md object-contain"
-            />
+            {extension.logo && (
+              <img
+                src={extension.logo}
+                alt={extension.name}
+                className="h-16 w-16 rounded-md object-contain"
+              />
+            )}
             <div>
               <CardTitle className="text-3xl">{extension.name}</CardTitle>
               <CardDescription className="mt-1">ID: {extension.id}</CardDescription>

@@ -15,7 +15,7 @@ import { Route as appRouteImport } from './routes/(app)/route'
 import { Route as appIndexImport } from './routes/(app)/index'
 import { Route as appExtensionsNewImport } from './routes/(app)/extensions/new'
 import { Route as appExtensionsExtIdImport } from './routes/(app)/extensions/$extId'
-import { Route as appExtensionsExtIdEditImport } from './routes/(app)/extensions/$extId.edit'
+import { Route as appExtensionsExtIdEditImport } from './routes/(app)/extensions/$extId_.edit'
 
 // Create/Update Routes
 
@@ -43,9 +43,9 @@ const appExtensionsExtIdRoute = appExtensionsExtIdImport.update({
 } as any)
 
 const appExtensionsExtIdEditRoute = appExtensionsExtIdEditImport.update({
-  id: '/edit',
-  path: '/edit',
-  getParentRoute: () => appExtensionsExtIdRoute,
+  id: '/extensions/$extId_/edit',
+  path: '/extensions/$extId/edit',
+  getParentRoute: () => appRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -80,39 +80,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appExtensionsNewImport
       parentRoute: typeof appRouteImport
     }
-    '/(app)/extensions/$extId/edit': {
-      id: '/(app)/extensions/$extId/edit'
-      path: '/edit'
+    '/(app)/extensions/$extId_/edit': {
+      id: '/(app)/extensions/$extId_/edit'
+      path: '/extensions/$extId/edit'
       fullPath: '/extensions/$extId/edit'
       preLoaderRoute: typeof appExtensionsExtIdEditImport
-      parentRoute: typeof appExtensionsExtIdImport
+      parentRoute: typeof appRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface appExtensionsExtIdRouteChildren {
-  appExtensionsExtIdEditRoute: typeof appExtensionsExtIdEditRoute
-}
-
-const appExtensionsExtIdRouteChildren: appExtensionsExtIdRouteChildren = {
-  appExtensionsExtIdEditRoute: appExtensionsExtIdEditRoute,
-}
-
-const appExtensionsExtIdRouteWithChildren =
-  appExtensionsExtIdRoute._addFileChildren(appExtensionsExtIdRouteChildren)
-
 interface appRouteRouteChildren {
   appIndexRoute: typeof appIndexRoute
-  appExtensionsExtIdRoute: typeof appExtensionsExtIdRouteWithChildren
+  appExtensionsExtIdRoute: typeof appExtensionsExtIdRoute
   appExtensionsNewRoute: typeof appExtensionsNewRoute
+  appExtensionsExtIdEditRoute: typeof appExtensionsExtIdEditRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
   appIndexRoute: appIndexRoute,
-  appExtensionsExtIdRoute: appExtensionsExtIdRouteWithChildren,
+  appExtensionsExtIdRoute: appExtensionsExtIdRoute,
   appExtensionsNewRoute: appExtensionsNewRoute,
+  appExtensionsExtIdEditRoute: appExtensionsExtIdEditRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
@@ -121,14 +112,14 @@ const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof appIndexRoute
-  '/extensions/$extId': typeof appExtensionsExtIdRouteWithChildren
+  '/extensions/$extId': typeof appExtensionsExtIdRoute
   '/extensions/new': typeof appExtensionsNewRoute
   '/extensions/$extId/edit': typeof appExtensionsExtIdEditRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof appIndexRoute
-  '/extensions/$extId': typeof appExtensionsExtIdRouteWithChildren
+  '/extensions/$extId': typeof appExtensionsExtIdRoute
   '/extensions/new': typeof appExtensionsNewRoute
   '/extensions/$extId/edit': typeof appExtensionsExtIdEditRoute
 }
@@ -137,9 +128,9 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/(app)': typeof appRouteRouteWithChildren
   '/(app)/': typeof appIndexRoute
-  '/(app)/extensions/$extId': typeof appExtensionsExtIdRouteWithChildren
+  '/(app)/extensions/$extId': typeof appExtensionsExtIdRoute
   '/(app)/extensions/new': typeof appExtensionsNewRoute
-  '/(app)/extensions/$extId/edit': typeof appExtensionsExtIdEditRoute
+  '/(app)/extensions/$extId_/edit': typeof appExtensionsExtIdEditRoute
 }
 
 export interface FileRouteTypes {
@@ -157,7 +148,7 @@ export interface FileRouteTypes {
     | '/(app)/'
     | '/(app)/extensions/$extId'
     | '/(app)/extensions/new'
-    | '/(app)/extensions/$extId/edit'
+    | '/(app)/extensions/$extId_/edit'
   fileRoutesById: FileRoutesById
 }
 
@@ -187,7 +178,8 @@ export const routeTree = rootRoute
       "children": [
         "/(app)/",
         "/(app)/extensions/$extId",
-        "/(app)/extensions/new"
+        "/(app)/extensions/new",
+        "/(app)/extensions/$extId_/edit"
       ]
     },
     "/(app)/": {
@@ -196,18 +188,15 @@ export const routeTree = rootRoute
     },
     "/(app)/extensions/$extId": {
       "filePath": "(app)/extensions/$extId.tsx",
-      "parent": "/(app)",
-      "children": [
-        "/(app)/extensions/$extId/edit"
-      ]
+      "parent": "/(app)"
     },
     "/(app)/extensions/new": {
       "filePath": "(app)/extensions/new.tsx",
       "parent": "/(app)"
     },
-    "/(app)/extensions/$extId/edit": {
-      "filePath": "(app)/extensions/$extId.edit.tsx",
-      "parent": "/(app)/extensions/$extId"
+    "/(app)/extensions/$extId_/edit": {
+      "filePath": "(app)/extensions/$extId_.edit.tsx",
+      "parent": "/(app)"
     }
   }
 }
