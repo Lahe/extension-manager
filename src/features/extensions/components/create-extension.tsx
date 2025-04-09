@@ -17,7 +17,11 @@ export function CreateExtension() {
         toast.success('Success', {
           description: `Extension "${createdExtension.name}" created successfully.`,
         })
-        navigate({ to: '/', replace: true })
+        navigate({
+          to: '/extensions/$extId',
+          params: { extId: createdExtension.id },
+          replace: true,
+        })
       },
       onError: (error: Error) => {
         toast.error('Error Creating Extension', {

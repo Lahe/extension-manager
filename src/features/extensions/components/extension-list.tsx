@@ -81,11 +81,13 @@ export function ExtensionList() {
               <CardHeader>
                 <div className="flex gap-4">
                   <div className="shrink-0 text-5xl" aria-hidden="true">
-                    <img
-                      src={extension.logo}
-                      alt={extension.name}
-                      className="h-12 w-12 object-contain"
-                    />
+                    {extension.logo && (
+                      <img
+                        src={extension.logo}
+                        alt={extension.name}
+                        className="h-12 w-12 object-contain"
+                      />
+                    )}
                   </div>
                   <div className="flex flex-col gap-2">
                     <CardTitle>{extension.name}</CardTitle>
