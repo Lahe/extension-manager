@@ -20,52 +20,42 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 import { categoriesQueryOptions } from '@/features/extensions/api/get-categories'
-import {
-  Category,
-  createExtensionWithCategoriesSchema,
-  NewExtension,
-  UpdateExtension,
-  updateExtensionWithCategoriesSchema,
-} from '@/features/extensions/db/schema'
+import { Category } from '@/features/extensions/db/schema'
 import { cn } from '@/utils/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Check, ChevronsUpDown, Loader2, X } from 'lucide-react'
+import { ChevronsUpDown, Loader2, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { ControllerRenderProps, DeepPartial, FieldValues, useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { DeepPartial, Path, useForm } from 'react-hook-form'
+import { z, ZodTypeAny } from 'zod'
 
-type ExtensionFormData = NewExtension | UpdateExtension
-type ExtensionFormSchema =
-  | z.infer<typeof createExtensionWithCategoriesSchema>
-  | z.infer<typeof updateExtensionWithCategoriesSchema>
-
-interface ExtensionFormProps {
-  schema: ExtensionFormSchema
-  onSubmit: (data: ExtensionFormData) => void
-  defaultValues?: DeepPartial<ExtensionFormData>
+interface ExtensionFormProps<T extends ZodTypeAny, TFormData extends z.infer<T>> {
+  schema: T
+  onSubmit: (data: TFormData) => void
+  defaultValues?: DeepPartial<TFormData>
   isLoading?: boolean
   submitButtonText?: string
+  isUpdateForm?: boolean
 }
 
-export function ExtensionForm({
+export function ExtensionForm<T extends ZodTypeAny, TFormData extends z.infer<T>>({
   schema,
   onSubmit,
   defaultValues,
   isLoading = false,
   submitButtonText = 'Save Extension',
-}: ExtensionFormProps) {
+  isUpdateForm = false,
+}: ExtensionFormProps<T, TFormData>) {
   const { data: categories = [] } = useSuspenseQuery(categoriesQueryOptions())
 
-  const form = useForm<ExtensionFormData>({
+  const form = useForm<TFormData>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues,
   })
 
-  const handleFormSubmit = (values: ExtensionFormData) => {
+  const handleFormSubmit = (values: TFormData) => {
     onSubmit(values)
   }
 
@@ -74,7 +64,7 @@ export function ExtensionForm({
       <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="name"
+          name={'name' as Path<TFormData>}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name *</FormLabel>
@@ -87,7 +77,7 @@ export function ExtensionForm({
         />
         <FormField
           control={form.control}
-          name="description"
+          name={'description' as Path<TFormData>}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Description</FormLabel>
@@ -104,7 +94,7 @@ export function ExtensionForm({
         />
         <FormField
           control={form.control}
-          name="logo"
+          name={'logo' as Path<TFormData>}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Logo URL *</FormLabel>
@@ -119,7 +109,7 @@ export function ExtensionForm({
         {/* Category Selector */}
         <FormField
           control={form.control}
-          name="categories"
+          name={'categories' as Path<TFormData>}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Categories</FormLabel>

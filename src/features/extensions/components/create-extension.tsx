@@ -49,7 +49,6 @@ export function CreateExtension() {
           isLoading={isPending}
           submitButtonText="Create Extension"
           defaultValues={{ name: '', description: '', logo: '', categories: [] }}
-          isUpdateForm={false}
         />
       </Suspense>
     </div>
