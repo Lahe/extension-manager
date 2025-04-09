@@ -1,6 +1,10 @@
 import { extensionsQueryOptions } from '@/features/extensions/api/get-extensions'
 import { updateExtensionStatus } from '@/features/extensions/db/mutations'
-import { toggleExtensionInputSchema, ToggleExtensionStatus } from '@/features/extensions/db/schema'
+import {
+  ExtensionWithCategories,
+  toggleExtensionInputSchema,
+  ToggleExtensionStatus,
+} from '@/features/extensions/db/schema'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createServerFn } from '@tanstack/react-start'
 
@@ -28,7 +32,7 @@ export const useToggleExtensionMutation = () => {
       const previousExtensions = queryClient.getQueryData(queryKey)
 
       if (previousExtensions) {
-        const optimisticExtensions = previousExtensions.map(ext =>
+        const optimisticExtensions = previousExtensions.map((ext: ExtensionWithCategories) =>
           ext.id === input.id ? { ...ext, isActive: input.isActive } : ext
         )
         queryClient.setQueryData(queryKey, optimisticExtensions)
