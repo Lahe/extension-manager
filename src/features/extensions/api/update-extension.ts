@@ -1,5 +1,7 @@
+import { categoriesQueryOptions } from '@/features/extensions/api/get-categories'
 import { extensionQueryOptions } from '@/features/extensions/api/get-extension'
 import { extensionsQueryOptions } from '@/features/extensions/api/get-extensions'
+import { updateExtensionById, updateExtensionStatus } from '@/features/extensions/db/mutations'
 import {
   ExtensionWithCategories,
   toggleExtensionInputSchema,
@@ -7,9 +9,10 @@ import {
   UpdateExtensionForm,
   updateExtensionFormSchema,
 } from '@/features/extensions/db/schema'
-import { updateExtensionById, updateExtensionStatus } from '@/features/extensions/db/updates'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
+import { toast } from 'sonner'
 
 export const toggleExtensionStatus = createServerFn({ method: 'POST' })
   .validator(toggleExtensionInputSchema)
@@ -67,14 +70,50 @@ export const updateExtension = createServerFn({ method: 'POST' })
   })
 
 export const useUpdateExtensionMutation = (id: number) => {
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const queryKey = extensionQueryOptions(id).queryKey
 
   return useMutation({
     mutationFn: (input: UpdateExtensionForm) => updateExtension({ data: input }),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: extensionQueryOptions(id).queryKey }),
-    onError: err => {
-      console.error(err.message)
+    onMutate: async updatedExtension => {
+      await queryClient.cancelQueries({ queryKey })
+      const previousExtension = queryClient.getQueryData(queryKey)
+      const categories = queryClient.getQueryData(categoriesQueryOptions().queryKey)
+
+      if (previousExtension && categories) {
+        const filteredCategories = categories.filter(category =>
+          updatedExtension.categories?.includes(category.id)
+        )
+
+        const optimisticExtension = {
+          ...previousExtension,
+          ...updatedExtension,
+          categories: filteredCategories,
+        }
+
+        queryClient.setQueryData(queryKey, optimisticExtension)
+      }
+
+      await navigate({ to: '/extensions/$extId', params: { extId: id }, replace: true })
+
+      return { previousExtension, updatedExtension }
     },
+    onSuccess: updatedExtension => {
+      toast.success(`Extension "${updatedExtension.name}" updated successfully.`)
+    },
+    onError: (error, _updatedExtension, context) => {
+      console.error(error.message)
+      if (context?.previousExtension) {
+        queryClient.setQueryData(queryKey, context.previousExtension)
+      }
+
+      navigate({ to: '/extensions/$extId/edit', params: { extId: id }, replace: true })
+
+      toast.error('Error updating extension', {
+        description: error.message || 'An unknown error occurred.',
+      })
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey }),
   })
 }

@@ -70,7 +70,6 @@ export function ExtensionView({ id }: ExtensionViewProps) {
               ))}
             </div>
           </div>
-          {/* Add other fields if necessary */}
         </CardContent>
       </Card>
     </div>

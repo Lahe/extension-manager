@@ -1,3 +1,4 @@
+import { categoriesQueryOptions } from '@/features/extensions/api/get-categories'
 import { extensionQueryOptions } from '@/features/extensions/api/get-extension'
 import { UpdateExtension } from '@/features/extensions/components/update-extension'
 import { createFileRoute, notFound } from '@tanstack/react-router'
@@ -19,7 +20,9 @@ export const Route = createFileRoute('/(app)/extensions/$extId_/edit')({
     },
   },
   loader: async ({ params, context }) => {
-    await context.queryClient.ensureQueryData(extensionQueryOptions(params.extId))
+    const extension = context.queryClient.ensureQueryData(extensionQueryOptions(params.extId))
+    const categories = context.queryClient.ensureQueryData(categoriesQueryOptions())
+    await Promise.all([extension, categories])
   },
   notFoundComponent: () => <div>Extension not found!</div>,
 })

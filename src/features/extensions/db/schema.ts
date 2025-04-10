@@ -5,7 +5,7 @@ import { z } from 'zod'
 // SELECT
 const selectExtensionsSchema = createSelectSchema(extensions)
 const selectCategoriesSchema = createSelectSchema(categories)
-export const selectExtensionsWithCategoriesSchema = createSelectSchema(extensions).extend({
+export const selectExtensionsWithCategoriesSchema = selectExtensionsSchema.extend({
   categories: selectCategoriesSchema.array().default([]),
 })
 
@@ -15,8 +15,11 @@ export interface ExtensionWithCategories
   extends z.infer<typeof selectExtensionsWithCategoriesSchema> {}
 
 // INSERT
-export const createExtensionSchema = createInsertSchema(extensions)
-export const createExtensionWithCategoriesSchema = createInsertSchema(extensions)
+export const createExtensionSchema = createInsertSchema(extensions, {
+  name: z.string().min(1),
+  logo: z.union([z.literal(''), z.string().trim().url()]),
+})
+export const createExtensionWithCategoriesSchema = createExtensionSchema
   .extend({
     categories: z.array(z.number()).default([]).optional(),
   })
@@ -27,7 +30,10 @@ export const createExtensionWithCategoriesSchema = createInsertSchema(extensions
 export interface NewExtension extends z.infer<typeof createExtensionWithCategoriesSchema> {}
 
 // UPDATE
-export const updateExtensionSchema = createUpdateSchema(extensions).extend({
+export const updateExtensionSchema = createUpdateSchema(extensions, {
+  name: z.string().min(1, 'Name is required'),
+  logo: z.union([z.literal(''), z.string().trim().url()]),
+}).extend({
   categories: z.array(z.number()).default([]).optional(),
 })
 export const updateExtensionFormSchema = updateExtensionSchema.extend({
@@ -42,3 +48,7 @@ export const toggleExtensionInputSchema = selectExtensionsSchema.pick({
 export interface UpdateExtension extends z.infer<typeof updateExtensionSchema> {}
 export interface UpdateExtensionForm extends z.infer<typeof updateExtensionFormSchema> {}
 export interface ToggleExtensionStatus extends z.infer<typeof toggleExtensionInputSchema> {}
+
+// DELETE
+export const deleteExtensionSchema = selectExtensionsSchema.pick({ id: true, name: true })
+export interface DeleteExtension extends z.infer<typeof deleteExtensionSchema> {}

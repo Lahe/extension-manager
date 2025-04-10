@@ -24,7 +24,6 @@ export function ExtensionList() {
   const { mutate: toggleExtension, isPending } = useToggleExtensionMutation()
   const [filter, setFilter] = useState('all')
 
-  // Filter extensions based on the selected filter
   const filteredExtensions = extensions.filter((extension: ExtensionWithCategories) => {
     if (filter === 'all') return true
     if (filter === 'active') return extension.isActive
@@ -41,7 +40,6 @@ export function ExtensionList() {
 
   return (
     <div className="container py-8">
-      {/* Header with title and filter buttons */}
       <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <h2 className="text-2xl font-bold">Extensions List</h2>
         <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
@@ -64,7 +62,6 @@ export function ExtensionList() {
         </div>
       </div>
 
-      {/* Extensions grid */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredExtensions.map(extension => (
           <Link
@@ -126,7 +123,6 @@ export function ExtensionList() {
         ))}
       </div>
 
-      {/* Empty state */}
       {filteredExtensions.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <p className="text-lg font-medium">No extensions found</p>

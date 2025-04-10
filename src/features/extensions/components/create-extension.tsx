@@ -5,34 +5,18 @@ import { createExtensionWithCategoriesSchema, NewExtension } from '@/features/ex
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
-import { toast } from 'sonner'
 
 export function CreateExtension() {
   const navigate = useNavigate({ from: '/extensions/new' })
   const { mutate: createExtension, isPending } = useCreateExtensionMutation()
 
   const handleSubmit = (extension: NewExtension) => {
-    createExtension(extension, {
-      onSuccess: createdExtension => {
-        toast.success(`Extension "${createdExtension.name}" created successfully.`)
-        navigate({
-          to: '/extensions/$extId',
-          params: { extId: createdExtension.id },
-          replace: true,
-        })
-      },
-      onError: (error: Error) => {
-        toast.error('Error creating extension', {
-          description: error.message || 'An unknown error occurred.',
-        })
-      },
-    })
+    createExtension(extension)
   }
 
   return (
     <div className="container py-8">
       <div className="mb-6 flex items-center justify-start">
-        {/* Navigate back */}
         <Button
           variant="outline"
           size="icon"
@@ -46,7 +30,7 @@ export function CreateExtension() {
       </div>
       <Suspense fallback={<div>Loading form...</div>}>
         <ExtensionForm
-          schema={createExtensionWithCategoriesSchema} // Pass the specific schema
+          schema={createExtensionWithCategoriesSchema}
           onSubmit={handleSubmit}
           isLoading={isPending}
           submitButtonText="Create Extension"

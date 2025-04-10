@@ -9,7 +9,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import { Suspense, useState } from 'react'
-import { toast } from 'sonner'
 
 interface UpdateExtensionProps {
   id: number
@@ -24,40 +23,18 @@ export function UpdateExtension({ id }: UpdateExtensionProps) {
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
-  // This receives data where 'categories' is already parsed into an array by the form wrapper
   const handleSubmit = (values: UpdateExtensionForm) => {
-    console.log('Submitting parsed values for update:', values)
-
-    updateExtension(values, {
-      onSuccess: updatedExtension => {
-        toast.success(`Extension "${updatedExtension.name}" updated successfully.`)
-        navigate({ to: '/extensions/$extId', params: { extId: id }, replace: true })
-      },
-      onError: (error: Error) => {
-        toast.error('Error updating extension', {
-          description: error.message || 'An unknown error occurred.',
-        })
-      },
-    })
+    updateExtension(values)
   }
 
   const handleDelete = () => {
     deleteExtension(id, {
-      onSuccess: deletedExtensionId => {
-        toast.success(`Extension "${deletedExtensionId}" deleted successfully.`)
-        setIsDeleteDialogOpen(false)
-        navigate({ to: '/', replace: true })
-      },
-      onError: (error: Error) => {
-        toast.error('Failed to delete extension', {
-          description: error.message || 'An unknown error occurred.',
-        })
+      onSettled: () => {
         setIsDeleteDialogOpen(false)
       },
     })
   }
 
-  // Prepare default values for the form, stringifying categories
   const defaultFormValues = {
     ...extension,
     categories: extension.categories.map(cat => cat.id),
@@ -89,6 +66,7 @@ export function UpdateExtension({ id }: UpdateExtensionProps) {
 
       <Suspense fallback={<div>Loading form...</div>}>
         <ExtensionForm
+          isUpdateForm
           schema={updateExtensionFormSchema}
           onSubmit={handleSubmit}
           isLoading={isUpdatePending}

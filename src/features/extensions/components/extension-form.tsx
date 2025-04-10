@@ -65,7 +65,6 @@ export function ExtensionForm<T extends ZodTypeAny, TFormData extends z.infer<T>
         {isUpdateForm && (
           <FormField
             control={form.control}
-            // Assertion is safe because of the conditional render check above
             name={'id' as Path<TFormData>}
             render={({ field }) => (
               <FormItem>
@@ -127,7 +126,7 @@ export function ExtensionForm<T extends ZodTypeAny, TFormData extends z.infer<T>
             </FormItem>
           )}
         />
-        {/* Category Selector */}
+
         <FormField
           control={form.control}
           name={'categories' as Path<TFormData>}
@@ -231,7 +230,6 @@ const CategorySelector = ({
         ))}
       </div>
 
-      {/* --- Searchable Select (Combobox) --- */}
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger asChild>
           <Button

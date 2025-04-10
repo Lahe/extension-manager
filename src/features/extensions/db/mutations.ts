@@ -1,7 +1,12 @@
 import { db } from '@/db/db'
 import { extensions, extensionsToCategories } from '@/db/schema'
 import { getExtensionWithCategoriesById } from '@/features/extensions/db/queries'
-import { Extension, ToggleExtensionStatus, UpdateExtension } from '@/features/extensions/db/schema'
+import {
+  DeleteExtension,
+  Extension,
+  ToggleExtensionStatus,
+  UpdateExtension,
+} from '@/features/extensions/db/schema'
 import { notFound } from '@tanstack/react-router'
 import { eq } from 'drizzle-orm'
 
@@ -50,11 +55,11 @@ export async function updateExtensionById(id: number, input: UpdateExtension): P
   return result
 }
 
-export async function deleteExtensionById(id: number): Promise<number> {
+export async function deleteExtensionById(id: number): Promise<DeleteExtension> {
   const deleted = await db
     .delete(extensions)
     .where(eq(extensions.id, id))
-    .returning({ id: extensions.id })
+    .returning({ id: extensions.id, name: extensions.name })
 
   if (deleted.length === 0) {
     throw notFound({
@@ -62,5 +67,5 @@ export async function deleteExtensionById(id: number): Promise<number> {
     })
   }
 
-  return deleted[0].id
+  return deleted[0]
 }
