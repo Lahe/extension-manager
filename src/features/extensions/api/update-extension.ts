@@ -71,7 +71,8 @@ export const useToggleExtensionMutation = () => {
       )
     },
     onError: (error, _toggledExtension, context) => {
-      console.error(error.message)
+      console.error('Optimistic update failed:', error.message)
+
       if (context?.previousExtensions) {
         queryClient.setQueryData(listQueryKey, context.previousExtensions)
       }
@@ -79,7 +80,7 @@ export const useToggleExtensionMutation = () => {
         queryClient.setQueryData(context.extensionQueryKey, context.previousExtension)
       }
 
-      toast.error('Error toggling extension', {
+      toast.error('Error', {
         description: error.message || 'An unknown error occurred.',
       })
     },
