@@ -1,5 +1,6 @@
 import { DefaultCatchBoundary } from '@/components/errors/default-catch-boundary'
 import { NotFound } from '@/components/errors/not-found'
+import { Toaster } from '@/components/ui/sonner'
 import appCss from '@/styles/app.css?url'
 import { seo } from '@/utils/seo'
 import { QueryClient } from '@tanstack/react-query'
@@ -73,6 +74,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 
         {children}
 
+        <Toaster />
         <TanStackRouterDevtools position="bottom-right" />
         <ReactQueryDevtools buttonPosition="bottom-left" />
 
