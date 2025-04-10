@@ -48,7 +48,7 @@ export const useToggleExtensionMutation = () => {
     },
     onSuccess: toggledExtension => {
       toast.success(
-        `Set extension "${toggledExtension.name}" to ${toggledExtension.isActive ? 'active' : 'inactive'}.`
+        `Extension "${toggledExtension.name}" set to ${toggledExtension.isActive ? 'active' : 'inactive'}.`
       )
     },
     onError: (error, _variables, context) => {
@@ -81,13 +81,18 @@ export const updateExtension = createServerFn({ method: 'POST' })
 export const useUpdateExtensionMutation = (id: number) => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const queryKey = extensionQueryOptions(id).queryKey
+  const listQueryKey = extensionsQueryOptions().queryKey
+  const extensionQueryKey = extensionQueryOptions(id).queryKey
 
   return useMutation({
     mutationFn: (input: UpdateExtensionForm) => updateExtension({ data: input }),
     onMutate: async updatedExtension => {
-      await queryClient.cancelQueries({ queryKey })
-      const previousExtension = queryClient.getQueryData(queryKey)
+      const listQuery = queryClient.cancelQueries({ queryKey: listQueryKey })
+      const extensionQuery = queryClient.cancelQueries({ queryKey: extensionQueryKey })
+      await Promise.all([listQuery, extensionQuery])
+
+      const previousExtensions = queryClient.getQueryData(listQueryKey)
+      const previousExtension = queryClient.getQueryData(extensionQueryKey)
       const categories = queryClient.getQueryData(categoriesQueryOptions().queryKey)
 
       if (previousExtension && categories) {
@@ -101,28 +106,45 @@ export const useUpdateExtensionMutation = (id: number) => {
           categories: filteredCategories,
         }
 
-        queryClient.setQueryData(queryKey, optimisticExtension)
+        queryClient.setQueryData(extensionQueryKey, optimisticExtension)
+
+        if (previousExtensions) {
+          queryClient.setQueryData(
+            listQueryKey,
+            previousExtensions.map((ext: ExtensionWithCategories) =>
+              ext.id === id ? optimisticExtension : ext
+            )
+          )
+        }
       }
 
       await navigate({ to: '/extensions/$extId', params: { extId: id }, replace: true })
 
-      return { previousExtension, updatedExtension }
+      return { previousExtension, previousExtensions, updatedExtension }
     },
     onSuccess: updatedExtension => {
       toast.success(`Extension "${updatedExtension.name}" updated successfully.`)
     },
     onError: (error, _updatedExtension, context) => {
-      console.error(error.message)
+      console.error('Optimistic update failed:', error.message)
+
+      if (context?.previousExtensions) {
+        queryClient.setQueryData(listQueryKey, context.previousExtensions)
+      }
       if (context?.previousExtension) {
-        queryClient.setQueryData(queryKey, context.previousExtension)
+        queryClient.setQueryData(extensionQueryKey, context.previousExtension)
       }
 
       navigate({ to: '/extensions/$extId/edit', params: { extId: id }, replace: true })
 
-      toast.error('Error updating extension', {
+      toast.error('Error', {
         description: error.message || 'An unknown error occurred.',
       })
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey }),
+    onSettled: () => {
+      const listQuery = queryClient.invalidateQueries({ queryKey: listQueryKey })
+      const extensionQuery = queryClient.invalidateQueries({ queryKey: extensionQueryKey })
+      return Promise.all([listQuery, extensionQuery])
+    },
   })
 }
