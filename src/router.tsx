@@ -27,6 +27,7 @@ export function createRouter() {
       defaultNotFoundComponent: NotFound,
       scrollRestoration: true,
       defaultStructuralSharing: true,
+      defaultPendingMs: 0, // https://github.com/TanStack/router/issues/1929
     }),
     queryClient
   )
