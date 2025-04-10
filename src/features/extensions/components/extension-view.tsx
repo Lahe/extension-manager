@@ -12,7 +12,7 @@ interface ExtensionViewProps {
 }
 
 export function ExtensionView({ id }: ExtensionViewProps) {
-  const navigate = useNavigate({ from: '/extensions/$extId' })
+  const navigate = useNavigate()
   const { data: extension } = useSuspenseQuery(extensionQueryOptions(id))
 
   return (

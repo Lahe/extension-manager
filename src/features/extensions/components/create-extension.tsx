@@ -7,7 +7,7 @@ import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
 
 export function CreateExtension() {
-  const navigate = useNavigate({ from: '/extensions/new' })
+  const navigate = useNavigate()
   const { mutate: createExtension, isPending } = useCreateExtensionMutation()
 
   const handleSubmit = (extension: NewExtension) => {

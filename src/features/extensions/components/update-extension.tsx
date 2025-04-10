@@ -15,7 +15,7 @@ interface UpdateExtensionProps {
 }
 
 export function UpdateExtension({ id }: UpdateExtensionProps) {
-  const navigate = useNavigate({ from: '/extensions/$extId/edit' })
+  const navigate = useNavigate()
   const { data: extension } = useSuspenseQuery(extensionQueryOptions(id))
 
   const { mutate: updateExtension, isPending: isUpdatePending } = useUpdateExtensionMutation(id)

@@ -36,10 +36,6 @@ export const useToggleExtensionMutation = () => {
     onMutate: async toggledExtension => {
       const extensionQueryKey = extensionQueryOptions(toggledExtension.id).queryKey
 
-      const listQuery = queryClient.cancelQueries({ queryKey: listQueryKey })
-      const extensionQuery = queryClient.cancelQueries({ queryKey: extensionQueryKey })
-      await Promise.all([listQuery, extensionQuery])
-
       const previousExtensions = queryClient.getQueryData(listQueryKey)
       const previousExtension = queryClient.getQueryData(extensionQueryKey)
 
@@ -84,18 +80,7 @@ export const useToggleExtensionMutation = () => {
         description: error.message || 'An unknown error occurred.',
       })
     },
-    onSettled: (_data, _error, _variables, context) => {
-      const listQuery = queryClient.invalidateQueries({ queryKey: listQueryKey })
-      const promises = [listQuery]
-
-      if (context?.extensionQueryKey) {
-        const extensionQuery = queryClient.invalidateQueries({
-          queryKey: context.extensionQueryKey,
-        })
-        promises.push(extensionQuery)
-      }
-      return Promise.all(promises)
-    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: listQueryKey }),
   })
 }
 
@@ -121,10 +106,6 @@ export const useUpdateExtensionMutation = (id: number) => {
   return useMutation({
     mutationFn: (input: UpdateExtensionForm) => updateExtension({ data: input }),
     onMutate: async updatedExtension => {
-      const listQuery = queryClient.cancelQueries({ queryKey: listQueryKey })
-      const extensionQuery = queryClient.cancelQueries({ queryKey: extensionQueryKey })
-      await Promise.all([listQuery, extensionQuery])
-
       const previousExtensions = queryClient.getQueryData(listQueryKey)
       const previousExtension = queryClient.getQueryData(extensionQueryKey)
       const categories = queryClient.getQueryData(categoriesQueryOptions().queryKey)
@@ -175,10 +156,6 @@ export const useUpdateExtensionMutation = (id: number) => {
         description: error.message || 'An unknown error occurred.',
       })
     },
-    onSettled: () => {
-      const listQuery = queryClient.invalidateQueries({ queryKey: listQueryKey })
-      const extensionQuery = queryClient.invalidateQueries({ queryKey: extensionQueryKey })
-      return Promise.all([listQuery, extensionQuery])
-    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: listQueryKey }),
   })
 }

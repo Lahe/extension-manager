@@ -26,10 +26,6 @@ export const useDeleteExtensionMutation = (id: number) => {
   return useMutation({
     mutationFn: (id: number) => deleteExtension({ data: id }),
     onMutate: async deledExtensionId => {
-      const listQuery = queryClient.cancelQueries({ queryKey: listQueryKey })
-      const extensionQuery = queryClient.cancelQueries({ queryKey: extensionQueryKey })
-      await Promise.all([listQuery, extensionQuery])
-
       const previousExtensions = queryClient.getQueryData(listQueryKey)
       const previousExtension = queryClient.getQueryData(extensionQueryKey)
 
@@ -60,10 +56,6 @@ export const useDeleteExtensionMutation = (id: number) => {
         description: error.message || 'An unknown error occurred.',
       })
     },
-    onSettled: () => {
-      const listQuery = queryClient.invalidateQueries({ queryKey: listQueryKey })
-      const extensionQuery = queryClient.invalidateQueries({ queryKey: extensionQueryKey })
-      return Promise.all([listQuery, extensionQuery])
-    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: listQueryKey }),
   })
 }
