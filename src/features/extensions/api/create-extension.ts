@@ -13,7 +13,7 @@ export const createExtension = createServerFn({ method: 'POST' })
       return await insertExtension(data)
     } catch (error) {
       console.error('Error during DB operation in createExtension:', error)
-      throw new Error(`Failed to create extension. ${error instanceof Error ? error.message : ''}`)
+      throw new Error(error instanceof Error ? error.message : '')
     }
   })
 
@@ -34,7 +34,7 @@ export const useCreateExtensionMutation = () => {
     },
     onError: error => {
       console.error(error.message)
-      toast.error('Error creating extension', {
+      toast.error('Error', {
         description: error.message || 'An unknown error occurred.',
       })
     },

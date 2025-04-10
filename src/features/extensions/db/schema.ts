@@ -42,6 +42,7 @@ export const updateExtensionFormSchema = updateExtensionSchema.extend({
 
 export const toggleExtensionInputSchema = selectExtensionsSchema.pick({
   id: true,
+  name: true,
   isActive: true,
 })
 

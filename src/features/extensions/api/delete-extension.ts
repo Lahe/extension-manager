@@ -13,7 +13,7 @@ export const deleteExtension = createServerFn({ method: 'POST' })
       return await deleteExtensionById(id)
     } catch (error) {
       console.error('Error during DB operation in deleteExtension:', error)
-      throw new Error(`Failed to delete extension. ${error instanceof Error ? error.message : ''}`)
+      throw new Error(error instanceof Error ? error.message : '')
     }
   })
 
@@ -56,7 +56,7 @@ export const useDeleteExtensionMutation = (id: number) => {
         queryClient.setQueryData(extensionQueryKey, context.previousExtension)
       }
 
-      toast.error('Failed to delete extension', {
+      toast.error('Error', {
         description: error.message || 'An unknown error occurred.',
       })
     },

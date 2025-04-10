@@ -21,7 +21,11 @@ import { useState } from 'react'
 
 export function ExtensionList() {
   const { data: extensions } = useSuspenseQuery(extensionsQueryOptions())
-  const { mutate: toggleExtension, isPending } = useToggleExtensionMutation()
+  const {
+    mutate: toggleExtension,
+    isPending,
+    variables: pendingExtension,
+  } = useToggleExtensionMutation()
   const [filter, setFilter] = useState('all')
 
   const filteredExtensions = extensions.filter((extension: ExtensionWithCategories) => {
@@ -34,6 +38,7 @@ export function ExtensionList() {
   const handleToggle = (extension: ExtensionWithCategories) => {
     toggleExtension({
       id: extension.id,
+      name: extension.name,
       isActive: !extension.isActive,
     })
   }
@@ -113,7 +118,7 @@ export function ExtensionList() {
                   <Switch
                     checked={extension.isActive}
                     onCheckedChange={() => handleToggle(extension)}
-                    disabled={isPending}
+                    disabled={isPending && pendingExtension?.id === extension.id}
                     aria-label={`${extension.isActive ? 'Disable' : 'Enable'} ${extension.name}`}
                   />
                 </div>

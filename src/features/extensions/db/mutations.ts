@@ -7,7 +7,6 @@ import {
   ToggleExtensionStatus,
   UpdateExtension,
 } from '@/features/extensions/db/schema'
-import { notFound } from '@tanstack/react-router'
 import { eq } from 'drizzle-orm'
 
 export async function updateExtensionStatus(input: ToggleExtensionStatus): Promise<Extension> {
@@ -18,9 +17,7 @@ export async function updateExtensionStatus(input: ToggleExtensionStatus): Promi
     .returning()
 
   if (updated.length === 0) {
-    throw notFound({
-      data: `Extension with id ${input.id} not found`,
-    })
+    throw new Error(`Failed to update extension with id: ${input.id}`)
   }
 
   return updated[0]
@@ -62,9 +59,7 @@ export async function deleteExtensionById(id: number): Promise<DeleteExtension> 
     .returning({ id: extensions.id, name: extensions.name })
 
   if (deleted.length === 0) {
-    throw notFound({
-      data: `Extension with id ${id} not found`,
-    })
+    throw new Error(`Failed to delete extension with id ${id}.`)
   }
 
   return deleted[0]

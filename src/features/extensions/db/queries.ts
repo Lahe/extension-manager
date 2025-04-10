@@ -1,7 +1,6 @@
 import { db } from '@/db/db'
 import { extensions } from '@/db/schema'
 import { Category, ExtensionWithCategories } from '@/features/extensions/db/schema'
-import { notFound } from '@tanstack/react-router'
 import { desc, eq } from 'drizzle-orm'
 
 export async function getExtensionsWithCategories(): Promise<ExtensionWithCategories[]> {
@@ -39,7 +38,7 @@ export async function getExtensionWithCategoriesById(id: number): Promise<Extens
   })
 
   if (!result) {
-    throw notFound()
+    throw new Error(`Extension with id ${id} not found.`)
   }
 
   const { extensionsToCategories, ...extensionData } = result

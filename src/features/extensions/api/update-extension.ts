@@ -46,11 +46,20 @@ export const useToggleExtensionMutation = () => {
 
       return { previousExtensions }
     },
-    onError: (err, _variables, context) => {
-      console.error(err.message)
+    onSuccess: toggledExtension => {
+      toast.success(
+        `Set extension "${toggledExtension.name}" to ${toggledExtension.isActive ? 'active' : 'inactive'}.`
+      )
+    },
+    onError: (error, _variables, context) => {
+      console.error(error.message)
       if (context?.previousExtensions) {
         queryClient.setQueryData(queryKey, context.previousExtensions)
       }
+
+      toast.error('Error toggling extension', {
+        description: error.message || 'An unknown error occurred.',
+      })
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
   })
