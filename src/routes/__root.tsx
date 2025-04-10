@@ -1,8 +1,8 @@
 import { DefaultCatchBoundary } from '@/components/errors/default-catch-boundary'
 import { NotFound } from '@/components/errors/not-found'
 import { Toaster } from '@/components/ui/sonner'
+import { seo } from '@/lib/seo'
 import appCss from '@/styles/app.css?url'
-import { seo } from '@/utils/seo'
 import { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {

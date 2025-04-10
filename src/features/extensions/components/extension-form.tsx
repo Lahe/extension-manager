@@ -23,7 +23,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Textarea } from '@/components/ui/textarea'
 import { categoriesQueryOptions } from '@/features/extensions/api/get-categories'
 import { Category } from '@/features/extensions/db/schema'
-import { cn } from '@/utils/utils'
+import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { ChevronsUpDown, Loader2, X } from 'lucide-react'

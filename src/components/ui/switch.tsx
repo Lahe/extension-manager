@@ -1,4 +1,4 @@
-import { cn } from '@/utils/utils'
+import { cn } from '@/lib/utils'
 import * as SwitchPrimitive from '@radix-ui/react-switch'
 import * as React from 'react'
 
