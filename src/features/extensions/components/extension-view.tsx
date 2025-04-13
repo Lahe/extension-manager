@@ -4,15 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { extensionQueryOptions } from '@/features/extensions/api/get-extension'
 import { cn } from '@/lib/utils'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { ArrowLeft, Pencil } from 'lucide-react'
 
-interface ExtensionViewProps {
-  id: number
-}
-
-export function ExtensionView({ id }: ExtensionViewProps) {
+export function ExtensionView() {
   const navigate = useNavigate()
+  const { extId: id } = useParams({ from: '/(app)/extensions/$extId' })
   const { data: extension } = useSuspenseQuery(extensionQueryOptions(id))
 
   return (

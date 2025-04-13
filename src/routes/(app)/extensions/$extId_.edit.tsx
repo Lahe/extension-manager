@@ -30,6 +30,5 @@ export const Route = createFileRoute('/(app)/extensions/$extId_/edit')({
 })
 
 function RouteComponent() {
-  const { extId } = Route.useParams()
-  return <UpdateExtension id={extId} />
+  return <UpdateExtension />
 }

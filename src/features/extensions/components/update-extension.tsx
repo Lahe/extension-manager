@@ -6,16 +6,13 @@ import { useUpdateExtensionMutation } from '@/features/extensions/api/update-ext
 import { ExtensionForm } from '@/features/extensions/components/extension-form'
 import { UpdateExtensionForm, updateExtensionFormSchema } from '@/features/extensions/db/schema'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigate, useParams } from '@tanstack/react-router'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import { Suspense, useState } from 'react'
 
-interface UpdateExtensionProps {
-  id: number
-}
-
-export function UpdateExtension({ id }: UpdateExtensionProps) {
+export function UpdateExtension() {
   const navigate = useNavigate()
+  const { extId: id } = useParams({ from: '/(app)/extensions/$extId_/edit' })
   const { data: extension } = useSuspenseQuery(extensionQueryOptions(id))
 
   const { mutate: updateExtension, isPending: isUpdatePending } = useUpdateExtensionMutation(id)
