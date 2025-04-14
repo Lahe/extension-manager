@@ -1,7 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { useCreateExtensionMutation } from '@/features/extensions/api/create-extension'
 import { ExtensionForm } from '@/features/extensions/components/extension-form'
-import { createExtensionWithCategoriesSchema, NewExtension } from '@/features/extensions/db/schema'
+import {
+  createExtensionWithCategoriesSchema,
+  NewExtensionWithCategories,
+} from '@/features/extensions/db/schema'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
@@ -10,7 +13,7 @@ export function CreateExtension() {
   const navigate = useNavigate()
   const { mutate: createExtension, isPending } = useCreateExtensionMutation()
 
-  const handleSubmit = (extension: NewExtension) => {
+  const handleSubmit = (extension: NewExtensionWithCategories) => {
     createExtension(extension)
   }
 

@@ -1,6 +1,9 @@
 import { extensionsQueryOptions } from '@/features/extensions/api/get-extensions'
 import { insertExtension } from '@/features/extensions/db/insertions'
-import { createExtensionWithCategoriesSchema, NewExtension } from '@/features/extensions/db/schema'
+import {
+  createExtensionWithCategoriesSchema,
+  NewExtensionWithCategories,
+} from '@/features/extensions/db/schema'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
@@ -23,7 +26,7 @@ export const useCreateExtensionMutation = () => {
   const navigate = useNavigate()
 
   return useMutation({
-    mutationFn: (extension: NewExtension) => createExtension({ data: extension }),
+    mutationFn: (extension: NewExtensionWithCategories) => createExtension({ data: extension }),
     onSuccess: newExtension => {
       toast.success(`Extension "${newExtension.name}" created successfully.`)
       navigate({

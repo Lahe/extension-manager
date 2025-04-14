@@ -1,5 +1,4 @@
 import { db } from '@/db/db'
-import { CategoriesId, ExtensionsId, ExtensionsToCategories } from '@/db/schemas'
 import { getExtensionWithCategoriesById } from '@/features/extensions/db/queries'
 import {
   ExtensionWithCategories,
@@ -24,9 +23,9 @@ export async function insertExtension(
     }
 
     if (categories && categories.length > 0) {
-      const links: ExtensionsToCategories[] = categories.map(id => ({
-        extensionId: newExtensionId as ExtensionsId,
-        categoryId: id as CategoriesId,
+      const links = categories.map(id => ({
+        extensionId: newExtensionId,
+        categoryId: id,
       }))
       await trx.insertInto('extensionsToCategories').values(links).execute()
     }

@@ -1,5 +1,5 @@
 import { db } from '@/db/db'
-import { CategoriesId, Extensions, ExtensionsId, ExtensionsToCategories } from '@/db/schemas'
+import { Extensions } from '@/db/schemas'
 import { getExtensionWithCategoriesById } from '@/features/extensions/db/queries'
 import {
   DeleteExtension,
@@ -13,15 +13,12 @@ export async function updateExtensionStatus(input: ToggleExtensionStatus): Promi
     .set({
       isActive: input.isActive,
     })
-    .where('id', '=', input.id as ExtensionsId)
+    .where('id', '=', input.id)
     .returningAll()
     .executeTakeFirstOrThrow(() => new Error(`Failed to update extension with id: ${input.id}`))
 }
 
-export async function updateExtensionById(
-  id: ExtensionsId,
-  input: UpdateExtension
-): Promise<Extensions> {
+export async function updateExtensionById(id: number, input: UpdateExtension): Promise<Extensions> {
   const { categories, ...extensionData } = input
 
   await db.transaction().execute(async trx => {
@@ -35,9 +32,9 @@ export async function updateExtensionById(
     await trx.deleteFrom('extensionsToCategories').where('extensionId', '=', id).execute()
 
     if (categories && categories.length > 0) {
-      const links: ExtensionsToCategories[] = categories.map(catId => ({
-        extensionId: id as ExtensionsId,
-        categoryId: catId as CategoriesId,
+      const links = categories.map(catId => ({
+        extensionId: id,
+        categoryId: catId,
       }))
       await trx.insertInto('extensionsToCategories').values(links).execute()
     }
@@ -46,7 +43,7 @@ export async function updateExtensionById(
   return await getExtensionWithCategoriesById(id)
 }
 
-export async function deleteExtensionById(id: ExtensionsId): Promise<DeleteExtension> {
+export async function deleteExtensionById(id: number): Promise<DeleteExtension> {
   return await db
     .deleteFrom('extensions')
     .where('id', '=', id)

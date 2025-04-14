@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const { generateIndexFile } = require('kanel')
+const { generateIndexFile, escapeIdentifier, resolveType } = require('kanel')
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { kyselyCamelCaseHook, kyselyTypeFilter, makeKyselyHook } = require('kanel-kysely')
 const {
@@ -10,9 +10,13 @@ const {
   zodCamelCaseHook,
   // eslint-disable-next-line @typescript-eslint/no-require-imports
 } = require('kanel-zod')
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { recase } = require('@kristiandupont/recase')
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require('dotenv').config()
+
+const toPascalCase = recase('snake', 'pascal')
 
 const generateZodSchemas = makeGenerateZodSchemas({
   getZodSchemaMetadata: defaultGetZodSchemaMetadata,
@@ -43,6 +47,24 @@ module.exports = {
     generateIndexFile,
   ],
   typeFilter: kyselyTypeFilter,
+
+  generateIdentifierType: (column, details, config) => {
+    const name = escapeIdentifier(toPascalCase(details.name) + toPascalCase(column.name))
+
+    const configWithoutGenerateIdentifierType = { ...config }
+    delete configWithoutGenerateIdentifierType.generateIdentifierType
+
+    const innerType = resolveType(column, details, configWithoutGenerateIdentifierType)
+
+    return {
+      declarationType: 'typeDeclaration',
+      name,
+      exportAs: 'named',
+      typeDefinition: [typeof innerType === 'string' ? innerType : innerType.name],
+      typeImports: typeof innerType === 'string' ? [] : innerType.typeImports,
+      comment: [`Identifier type for ${details.schemaName}.${details.name}`],
+    }
+  },
 
   customTypeMap: {
     // A text search vector could be stored as a set of strings. See Film.ts for an example.

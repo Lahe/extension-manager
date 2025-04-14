@@ -10,9 +10,10 @@ import {
 } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { Categories } from '@/db/schemas'
 import { extensionsQueryOptions } from '@/features/extensions/api/get-extensions'
 import { useToggleExtensionMutation } from '@/features/extensions/api/update-extension'
-import { Category, ExtensionWithCategories } from '@/features/extensions/db/schema'
+import { ExtensionWithCategories } from '@/features/extensions/db/schema'
 import { cn } from '@/lib/utils'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
@@ -103,7 +104,7 @@ export function ExtensionList() {
               </CardHeader>
 
               <CardContent className="flex flex-wrap gap-1">
-                {extension.categories.map((category: Category) => (
+                {extension.categories.map((category: Categories) => (
                   <Badge key={category.name} className={cn('text-foreground py-1', category.color)}>
                     {category.name}
                   </Badge>

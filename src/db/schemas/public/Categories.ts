@@ -5,7 +5,7 @@ import type { ColumnType, Selectable, Insertable, Updateable } from 'kysely';
 import { z } from 'zod';
 
 /** Identifier type for public.categories */
-export type CategoriesId = number & { __brand: 'CategoriesId' };
+export type CategoriesId = number;
 
 /** Represents the table public.categories */
 export default interface CategoriesTable {

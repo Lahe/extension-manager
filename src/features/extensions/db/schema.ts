@@ -2,6 +2,7 @@ import { categories, extensions, extensionsInitializer, extensionsMutator } from
 import { z } from 'zod'
 
 const extensionsFormSchema = z.object({
+  id: z.number().int().positive(),
   name: z.string().min(1),
   logo: z.union([z.literal(''), z.string().trim().url()]),
   categories: z.array(z.number()).default([]).optional(),
@@ -34,19 +35,19 @@ export const updateExtensionSchema = updateExtensionFormSchema.omit({
   updatedAt: true,
 })
 
-export const toggleExtensionInputSchema = extensionsMutator.pick({
+export const toggleExtensionInputSchema = extensions.pick({
   id: true,
   name: true,
   isActive: true,
 })
 
-export interface UpdateExtension extends z.infer<typeof updateExtensionSchema> {}
+export type UpdateExtension = z.infer<typeof updateExtensionSchema>
 
-export interface UpdateExtensionForm extends z.infer<typeof updateExtensionFormSchema> {}
+export type UpdateExtensionForm = z.infer<typeof updateExtensionFormSchema>
 
-export interface ToggleExtensionStatus extends z.infer<typeof toggleExtensionInputSchema> {}
+export type ToggleExtensionStatus = z.infer<typeof toggleExtensionInputSchema>
 
 // DELETE
 export const deleteExtensionSchema = extensions.pick({ id: true, name: true })
 
-export interface DeleteExtension extends z.infer<typeof deleteExtensionSchema> {}
+export type DeleteExtension = z.infer<typeof deleteExtensionSchema>

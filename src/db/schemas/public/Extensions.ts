@@ -5,7 +5,7 @@ import type { ColumnType, Selectable, Insertable, Updateable } from 'kysely';
 import { z } from 'zod';
 
 /** Identifier type for public.extensions */
-export type ExtensionsId = number & { __brand: 'ExtensionsId' };
+export type ExtensionsId = number;
 
 /** Represents the table public.extensions */
 export default interface ExtensionsTable {

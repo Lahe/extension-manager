@@ -21,8 +21,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Textarea } from '@/components/ui/textarea'
+import { Categories } from '@/db/schemas'
 import { categoriesQueryOptions } from '@/features/extensions/api/get-categories'
-import { Category } from '@/features/extensions/db/schema'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -177,7 +177,7 @@ export function ExtensionForm<T extends ZodTypeAny, TFormData extends z.infer<T>
 }
 
 interface CategorySelectorProps {
-  categories: Category[]
+  categories: Categories[]
   selectedIds: number[]
   onChange: (newIds: number[]) => void
   disabled?: boolean

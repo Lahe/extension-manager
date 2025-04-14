@@ -1,5 +1,5 @@
 import { db } from '@/db/db'
-import { Categories, CategoriesId, ExtensionsId } from '@/db/schemas'
+import { Categories } from '@/db/schemas'
 import { ExtensionWithCategories } from '@/features/extensions/db/schema'
 
 function shapeExtensionsWithCategories(
@@ -29,7 +29,7 @@ function shapeExtensionsWithCategories(
     if (!extension) {
       extension = {
         // Map fields from the row to the ExtensionWithCategories structure
-        id: row.extension_id as ExtensionsId,
+        id: row.extension_id,
         name: row.extension_name,
         description: row.extension_description,
         logo: row.extension_logo,
@@ -49,7 +49,7 @@ function shapeExtensionsWithCategories(
       // Avoid adding duplicate categories if the query returns multiple identical category rows (though unlikely with this structure)
       if (!extension?.categories.some(cat => cat.id === row.category_id)) {
         extension.categories.push({
-          id: row.category_id as CategoriesId,
+          id: row.category_id,
           name: row.category_name,
           color: row.category_color,
           createdAt: row.category_created_at ?? new Date(),
@@ -89,9 +89,7 @@ export async function getExtensionsWithCategories(): Promise<ExtensionWithCatego
   return shapeExtensionsWithCategories(result)
 }
 
-export async function getExtensionWithCategoriesById(
-  id: ExtensionsId
-): Promise<ExtensionWithCategories> {
+export async function getExtensionWithCategoriesById(id: number): Promise<ExtensionWithCategories> {
   const flatResult = await db
     .selectFrom('extensions')
     .leftJoin(
