@@ -1,8 +1,7 @@
 import { env } from '@/config/env'
-import { drizzle } from 'drizzle-orm/node-postgres'
+import { Database } from '@/db/schemas'
+import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely'
 import pg from 'pg'
-
-import * as schema from './schema'
 
 const { Pool } = pg
 
@@ -10,4 +9,10 @@ const pool = new Pool({
   connectionString: env.DATABASE_URL,
 })
 
-export const db = drizzle({ client: pool, schema, casing: 'snake_case' })
+export const db = new Kysely<Database>({
+  log: ['error'],
+  dialect: new PostgresDialect({
+    pool,
+  }),
+  plugins: [new CamelCasePlugin()],
+})
