@@ -1,66 +1,55 @@
 import { db } from '@/db/db'
-import { extensions, extensionsToCategories } from '@/db/schema'
+import { CategoriesId, Extensions, ExtensionsId, ExtensionsToCategories } from '@/db/schemas'
 import { getExtensionWithCategoriesById } from '@/features/extensions/db/queries'
 import {
   DeleteExtension,
-  Extension,
   ToggleExtensionStatus,
   UpdateExtension,
 } from '@/features/extensions/db/schema'
-import { eq } from 'drizzle-orm'
 
-export async function updateExtensionStatus(input: ToggleExtensionStatus): Promise<Extension> {
-  const updated = await db
-    .update(extensions)
-    .set({ isActive: input.isActive })
-    .where(eq(extensions.id, input.id))
-    .returning()
-
-  if (updated.length === 0) {
-    throw new Error(`Failed to update extension with id: ${input.id}`)
-  }
-
-  return updated[0]
+export async function updateExtensionStatus(input: ToggleExtensionStatus): Promise<Extensions> {
+  return await db
+    .updateTable('extensions')
+    .set({
+      isActive: input.isActive,
+    })
+    .where('id', '=', input.id as ExtensionsId)
+    .returningAll()
+    .executeTakeFirstOrThrow(() => new Error(`Failed to update extension with id: ${input.id}`))
 }
 
-export async function updateExtensionById(id: number, input: UpdateExtension): Promise<Extension> {
+export async function updateExtensionById(
+  id: ExtensionsId,
+  input: UpdateExtension
+): Promise<Extensions> {
   const { categories, ...extensionData } = input
 
-  const updatedExtension = await db.transaction(async trx => {
+  await db.transaction().execute(async trx => {
     await trx
-      .update(extensions)
-      .set({ ...extensionData })
-      .where(eq(extensions.id, id))
-      .returning({ id: extensions.id })
+      .updateTable('extensions')
+      .set(extensionData)
+      .where('id', '=', id)
+      .returning('id')
+      .executeTakeFirst()
 
-    await trx.delete(extensionsToCategories).where(eq(extensionsToCategories.extensionId, id))
+    await trx.deleteFrom('extensionsToCategories').where('extensionId', '=', id).execute()
 
     if (categories && categories.length > 0) {
-      const links = categories.map(catId => ({ extensionId: id, categoryId: catId }))
-      await trx.insert(extensionsToCategories).values(links)
+      const links: ExtensionsToCategories[] = categories.map(catId => ({
+        extensionId: id as ExtensionsId,
+        categoryId: catId as CategoriesId,
+      }))
+      await trx.insertInto('extensionsToCategories').values(links).execute()
     }
-
-    return id
   })
 
-  const result = await getExtensionWithCategoriesById(updatedExtension)
-
-  if (!result) {
-    throw new Error(`Failed to fetch updated extension with id ${id}.`)
-  }
-
-  return result
+  return await getExtensionWithCategoriesById(id)
 }
 
-export async function deleteExtensionById(id: number): Promise<DeleteExtension> {
-  const deleted = await db
-    .delete(extensions)
-    .where(eq(extensions.id, id))
-    .returning({ id: extensions.id, name: extensions.name })
-
-  if (deleted.length === 0) {
-    throw new Error(`Failed to delete extension with id ${id}.`)
-  }
-
-  return deleted[0]
+export async function deleteExtensionById(id: ExtensionsId): Promise<DeleteExtension> {
+  return await db
+    .deleteFrom('extensions')
+    .where('id', '=', id)
+    .returning(['id', 'name'])
+    .executeTakeFirstOrThrow(() => new Error(`Failed to delete extension with id: ${id}`))
 }

@@ -1,55 +1,52 @@
-import { categories, extensions } from '@/db/schema'
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod'
+import { categories, extensions, extensionsInitializer, extensionsMutator } from '@/db/schemas'
 import { z } from 'zod'
 
-// SELECT
-const selectExtensionsSchema = createSelectSchema(extensions)
-const selectCategoriesSchema = createSelectSchema(categories)
-export const selectExtensionsWithCategoriesSchema = selectExtensionsSchema.extend({
-  categories: selectCategoriesSchema.array().default([]),
-})
-
-export interface Category extends z.infer<typeof selectCategoriesSchema> {}
-export interface Extension extends z.infer<typeof selectExtensionsSchema> {}
-export interface ExtensionWithCategories
-  extends z.infer<typeof selectExtensionsWithCategoriesSchema> {}
-
-// INSERT
-export const createExtensionSchema = createInsertSchema(extensions, {
+const extensionsFormSchema = z.object({
   name: z.string().min(1),
   logo: z.union([z.literal(''), z.string().trim().url()]),
-})
-export const createExtensionWithCategoriesSchema = createExtensionSchema
-  .extend({
-    categories: z.array(z.number()).default([]).optional(),
-  })
-  .omit({
-    isActive: true,
-  })
-
-export interface NewExtension extends z.infer<typeof createExtensionWithCategoriesSchema> {}
-
-// UPDATE
-export const updateExtensionSchema = createUpdateSchema(extensions, {
-  name: z.string().min(1, 'Name is required'),
-  logo: z.union([z.literal(''), z.string().trim().url()]),
-}).extend({
   categories: z.array(z.number()).default([]).optional(),
 })
-export const updateExtensionFormSchema = updateExtensionSchema.extend({
-  id: z.number().int().positive(),
+
+// SELECT
+export const selectExtensionsWithCategoriesSchema = extensions.extend({
+  categories: categories.array().default([]),
 })
 
-export const toggleExtensionInputSchema = selectExtensionsSchema.pick({
+export type ExtensionWithCategories = z.infer<typeof selectExtensionsWithCategoriesSchema>
+
+// INSERT
+export const createExtensionWithCategoriesSchema = extensionsInitializer
+  .merge(extensionsFormSchema)
+  .omit({
+    id: true,
+    isActive: true,
+    createdAt: true,
+    updatedAt: true,
+  })
+
+export type NewExtensionWithCategories = z.infer<typeof createExtensionWithCategoriesSchema>
+
+// UPDATE
+export const updateExtensionFormSchema = extensionsMutator.merge(extensionsFormSchema)
+export const updateExtensionSchema = updateExtensionFormSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+})
+
+export const toggleExtensionInputSchema = extensionsMutator.pick({
   id: true,
   name: true,
   isActive: true,
 })
 
 export interface UpdateExtension extends z.infer<typeof updateExtensionSchema> {}
+
 export interface UpdateExtensionForm extends z.infer<typeof updateExtensionFormSchema> {}
+
 export interface ToggleExtensionStatus extends z.infer<typeof toggleExtensionInputSchema> {}
 
 // DELETE
-export const deleteExtensionSchema = selectExtensionsSchema.pick({ id: true, name: true })
+export const deleteExtensionSchema = extensions.pick({ id: true, name: true })
+
 export interface DeleteExtension extends z.infer<typeof deleteExtensionSchema> {}

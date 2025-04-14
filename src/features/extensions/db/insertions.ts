@@ -1,25 +1,34 @@
 import { db } from '@/db/db'
-import { extensions, extensionsToCategories } from '@/db/schema'
+import { CategoriesId, ExtensionsId, ExtensionsToCategories } from '@/db/schemas'
 import { getExtensionWithCategoriesById } from '@/features/extensions/db/queries'
-import { ExtensionWithCategories, NewExtension } from '@/features/extensions/db/schema'
+import {
+  ExtensionWithCategories,
+  NewExtensionWithCategories,
+} from '@/features/extensions/db/schema'
 
-export async function insertExtension(extension: NewExtension): Promise<ExtensionWithCategories> {
+export async function insertExtension(
+  extension: NewExtensionWithCategories
+): Promise<ExtensionWithCategories> {
   const { categories, ...extensionData } = extension
 
-  const newExtension = await db.transaction(async trx => {
+  const newExtension = await db.transaction().execute(async trx => {
     const inserted = await trx
-      .insert(extensions)
+      .insertInto('extensions')
       .values(extensionData)
-      .returning({ id: extensions.id })
-    const newExtensionId = inserted[0]?.id
+      .returning('id')
+      .executeTakeFirst()
+    const newExtensionId = inserted?.id
 
     if (!newExtensionId) {
       throw new Error('Failed to insert extension')
     }
 
     if (categories && categories.length > 0) {
-      const links = categories.map(id => ({ extensionId: newExtensionId, categoryId: id }))
-      await trx.insert(extensionsToCategories).values(links)
+      const links: ExtensionsToCategories[] = categories.map(id => ({
+        extensionId: newExtensionId as ExtensionsId,
+        categoryId: id as CategoriesId,
+      }))
+      await trx.insertInto('extensionsToCategories').values(links).execute()
     }
 
     return newExtensionId
