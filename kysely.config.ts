@@ -1,16 +1,8 @@
-import { fileURLToPath } from 'url'
-import { createJiti } from 'jiti'
+import { db } from '@/db/db'
 import { defineConfig } from 'kysely-ctl'
 
-const moduleFileUrl = import.meta.url
-const jiti = createJiti(fileURLToPath(moduleFileUrl), {
-  alias: { '@': fileURLToPath(new URL('./src', moduleFileUrl)) },
-})
-
-const kysely = jiti('./src/db/db.ts')
-
 export default defineConfig({
-  kysely: kysely.db,
+  kysely: db,
   migrations: {
     migrationFolder: './src/db/migrations',
   },

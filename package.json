@@ -11,7 +11,7 @@
     "format": "prettier --write --ignore-unknown --ignore-path .prettierignore --cache .",
     "db:generate": "kanel",
     "db:migrate": "kysely migrate latest",
-    "db:seed": "kysely seed run",
+    "db:seed": "kysely seed run --experimental-resolve-tsconfig-paths",
     "db:clear": "kysely migrate rollback --all"
   },
   "lint-staged": {
