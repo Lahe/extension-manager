@@ -22,7 +22,7 @@ export const Route = createFileRoute('/(app)/extensions/$extId_/edit')({
   loader: async ({ params, context }) => {
     const extension = context.queryClient.ensureQueryData(extensionQueryOptions(params.extId))
     const categories = context.queryClient.ensureQueryData(categoriesQueryOptions())
-    await Promise.all([extension, categories])
+    return Promise.all([extension, categories])
   },
   pendingComponent: () => <div>Loading...</div>,
   notFoundComponent: () => <div>Extension not found!</div>,

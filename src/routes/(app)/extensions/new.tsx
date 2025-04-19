@@ -4,9 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/(app)/extensions/new')({
   component: RouteComponent,
-  loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData(categoriesQueryOptions())
-  },
+  loader: async ({ context }) => context.queryClient.ensureQueryData(categoriesQueryOptions()),
 })
 
 function RouteComponent() {
