@@ -1,28 +1,16 @@
 import { db } from '@/db/db'
-import { sql } from 'drizzle-orm'
+import { reset } from 'drizzle-seed'
+
+import * as schema from './schema'
 
 async function clear() {
-  const tablesSchema = db._.schema
-  if (!tablesSchema) {
-    throw new Error('No schema found')
-  }
-  const queries = Object.values(tablesSchema).map(table => {
-    return sql.raw(`DELETE FROM ${table.dbName};`)
-  })
-
-  await db.transaction(async trx => {
-    await Promise.all(
-      queries.map(async query => {
-        if (query) await trx.execute(query)
-      })
-    )
-  })
+  await reset(db, schema)
 }
 
 clear()
   .then(() => {
     console.log('Database cleared')
-    return
+    process.exit(0)
   })
   .catch(e => {
     console.log(e)

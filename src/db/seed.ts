@@ -1,12 +1,13 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 import { db } from '@/db/db'
-import { categories, extensions, extensionsToCategories } from '@/db/schema'
+import { categories } from '@/db/schema'
+import { insertExtension } from '@/features/extensions/db/insertions'
 import {
   Category,
-  createExtensionSchema,
+  createExtensionWithCategoriesSchema,
   ExtensionWithCategories,
-} from '@/features/extensions/db/schema'
+} from '@/features/extensions/schemas'
 
 async function seed() {
   // Path relative to "package.json"
@@ -25,49 +26,24 @@ async function seed() {
 
   const uniqueCategories = Array.from(uniqueCategoriesMap.values())
 
-  await db.transaction(async trx => {
-    const insertedCategories = await trx.insert(categories).values(uniqueCategories).returning({
-      id: categories.id,
-      name: categories.name,
-    })
-
-    const categoryIdMap = new Map(insertedCategories.map(c => [c.name, c.id]))
-    const joinTableEntries: { extensionId: number; categoryId: number }[] = []
-
-    for (const item of jsonData) {
-      const extensionData = {
-        name: item.name,
-        description: item.description,
-        isActive: item.isActive,
-        logo: item.logo.replace('./assets', '/assets'),
-      }
-
-      const validationRes = createExtensionSchema.safeParse(extensionData)
-
-      if (!validationRes.success) {
-        throw new Error('Invalid data found in JSON')
-      }
-
-      const [insertedExtension] = await trx
-        .insert(extensions)
-        .values(validationRes.data)
-        .returning({ id: extensions.id })
-
-      if (!insertedExtension) {
-        throw new Error(`Failed to insert extension: ${item.name}`)
-      }
-
-      item.categories.forEach((category: Category) => {
-        const categoryId = categoryIdMap.get(category.name)
-        if (categoryId) {
-          joinTableEntries.push({ extensionId: insertedExtension.id, categoryId: categoryId })
-        } else {
-          console.warn('hello')
-        }
-      })
-    }
-    await trx.insert(extensionsToCategories).values(joinTableEntries)
+  const insertedCategories = await db.insert(categories).values(uniqueCategories).returning({
+    id: categories.id,
+    name: categories.name,
   })
+  const categoryIdMap = new Map(insertedCategories.map(c => [c.name, c.id]))
+
+  for (const item of jsonData) {
+    const extensionData = {
+      name: item.name,
+      description: item.description,
+      isActive: item.isActive,
+      logo: item.logo.replace('./assets', '/assets'),
+      categories: item.categories.map((c: Category) => categoryIdMap.get(c.name)),
+    }
+
+    const validated = createExtensionWithCategoriesSchema.parse(extensionData)
+    await insertExtension(validated)
+  }
 }
 
 seed()
