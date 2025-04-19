@@ -1,5 +1,5 @@
+import { DeleteConfirmationDialog } from '@/components/delete-confirmation'
 import { Button } from '@/components/ui/button'
-import { DeleteConfirmationDialog } from '@/features/common/components/delete-confirmation'
 import { useDeleteExtensionMutation } from '@/features/extensions/api/delete-extension'
 import { extensionQueryOptions } from '@/features/extensions/api/get-extension'
 import { useUpdateExtensionMutation } from '@/features/extensions/api/update-extension'

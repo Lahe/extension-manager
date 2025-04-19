@@ -1,5 +1,5 @@
-import { Footer } from '@/features/common/components/footer'
-import { Header } from '@/features/common/components/header'
+import { Footer } from '@/components/footer'
+import { Header } from '@/components/header'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/(app)')({
