@@ -3,8 +3,8 @@ import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'driz
 import { z } from 'zod'
 
 // SELECT
-const selectExtensionsSchema = createSelectSchema(extensions)
-const selectCategoriesSchema = createSelectSchema(categories)
+export const selectExtensionsSchema = createSelectSchema(extensions)
+export const selectCategoriesSchema = createSelectSchema(categories)
 export const selectExtensionsWithCategoriesSchema = selectExtensionsSchema.extend({
   categories: selectCategoriesSchema.array().default([]),
 })
@@ -20,7 +20,11 @@ const extensionsFormValidation = {
   name: z.string().min(3, 'Name must be at least 3 characters'),
 }
 
-export const createExtensionSchema = createInsertSchema(extensions, extensionsFormValidation)
+export const createExtensionSchema = createInsertSchema(
+  extensions,
+  extensionsFormValidation
+).strict()
+
 export const createExtensionWithCategoriesSchema = createExtensionSchema
   .extend({
     categories: categoryIdsValidation.optional(),
@@ -28,24 +32,29 @@ export const createExtensionWithCategoriesSchema = createExtensionSchema
   .omit({
     isActive: true,
   })
+  .strict()
 
 export interface NewExtension extends z.infer<typeof createExtensionWithCategoriesSchema> {}
 
 // UPDATE
-export const updateExtensionSchema = createUpdateSchema(
-  extensions,
-  extensionsFormValidation
-).extend({
-  categories: categoryIdsValidation.optional(),
-})
-export const updateExtensionFormSchema = updateExtensionSchema.extend({
-  id: selectExtensionsSchema.shape.id,
-})
+export const updateExtensionSchema = createUpdateSchema(extensions, extensionsFormValidation)
+  .extend({
+    categories: categoryIdsValidation.optional(),
+  })
+  .strict()
 
-export const toggleExtensionInputSchema = selectExtensionsSchema.pick({
-  id: true,
-  isActive: true,
-})
+export const updateExtensionFormSchema = updateExtensionSchema
+  .extend({
+    id: selectExtensionsSchema.shape.id,
+  })
+  .strict()
+
+export const toggleExtensionInputSchema = selectExtensionsSchema
+  .pick({
+    id: true,
+    isActive: true,
+  })
+  .strict()
 
 export interface UpdateExtension extends z.infer<typeof updateExtensionSchema> {}
 export interface UpdateExtensionForm extends z.infer<typeof updateExtensionFormSchema> {}

@@ -7,7 +7,12 @@ import {
   Category,
   createExtensionWithCategoriesSchema,
   ExtensionWithCategories,
+  selectExtensionsSchema,
 } from '@/features/extensions/schemas'
+
+const seedValidationSchema = createExtensionWithCategoriesSchema.extend({
+  isActive: selectExtensionsSchema.shape.isActive,
+})
 
 async function seed() {
   // Path relative to "package.json"
@@ -41,7 +46,7 @@ async function seed() {
       categories: item.categories.map((c: Category) => categoryIdMap.get(c.name)),
     }
 
-    const validated = createExtensionWithCategoriesSchema.parse(extensionData)
+    const validated = seedValidationSchema.parse(extensionData)
     await insertExtension(validated)
   }
 }
