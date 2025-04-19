@@ -3,6 +3,7 @@ import { Extensions } from '@/db/schemas'
 import { getExtensionWithCategoriesById } from '@/features/extensions/db/queries'
 import {
   DeleteExtension,
+  ExtensionWithCategories,
   ToggleExtensionStatus,
   UpdateExtension,
 } from '@/features/extensions/db/schema'
@@ -18,7 +19,10 @@ export async function updateExtensionStatus(input: ToggleExtensionStatus): Promi
     .executeTakeFirstOrThrow(() => new Error(`Failed to update extension with id: ${input.id}`))
 }
 
-export async function updateExtensionById(id: number, input: UpdateExtension): Promise<Extensions> {
+export async function updateExtensionById(
+  id: number,
+  input: UpdateExtension
+): Promise<ExtensionWithCategories> {
   const { categories, ...extensionData } = input
 
   await db.transaction().execute(async trx => {

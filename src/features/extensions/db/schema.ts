@@ -14,7 +14,7 @@ export const selectCategoriesSchema = categories.pick({
   name: true,
   color: true,
 })
-export type Categories = z.infer<typeof selectCategoriesSchema>
+export type Category = z.infer<typeof selectCategoriesSchema>
 
 export const selectExtensionsWithCategoriesSchema = extensions
   .extend({

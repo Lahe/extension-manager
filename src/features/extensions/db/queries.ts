@@ -1,5 +1,5 @@
 import { db } from '@/db/db'
-import { Categories, ExtensionWithCategories } from '@/features/extensions/db/schema'
+import { Category, ExtensionWithCategories } from '@/features/extensions/db/schema'
 import { sql } from 'kysely'
 import { jsonBuildObject } from 'kysely/helpers/postgres'
 
@@ -26,7 +26,7 @@ export async function getExtensionsWithCategories(): Promise<ExtensionWithCatego
                 .orderBy('c.id')
                 .as('aggregated_categories')
             ),
-          sql<Categories[]>`'[]'`
+          sql<Category[]>`'[]'`
         )
         .as('categories')
     )
@@ -57,7 +57,7 @@ export async function getExtensionWithCategoriesById(id: number): Promise<Extens
                 .orderBy('c.id')
                 .as('aggregated_categories')
             ),
-          sql<Categories[]>`'[]'`
+          sql<Category[]>`'[]'`
         )
         .as('categories')
     )
@@ -65,6 +65,6 @@ export async function getExtensionWithCategoriesById(id: number): Promise<Extens
     .executeTakeFirstOrThrow()
 }
 
-export async function getCategories(): Promise<Categories[]> {
+export async function getCategories(): Promise<Category[]> {
   return await db.selectFrom('categories').selectAll().orderBy('name', 'asc').execute()
 }
