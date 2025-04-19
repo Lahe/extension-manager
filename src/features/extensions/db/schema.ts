@@ -9,9 +9,21 @@ const extensionsFormSchema = z.object({
 })
 
 // SELECT
-export const selectExtensionsWithCategoriesSchema = extensions.extend({
-  categories: categories.array().default([]),
+export const selectCategoriesSchema = categories.pick({
+  id: true,
+  name: true,
+  color: true,
 })
+export type Categories = z.infer<typeof selectCategoriesSchema>
+
+export const selectExtensionsWithCategoriesSchema = extensions
+  .extend({
+    categories: selectCategoriesSchema.array().default([]),
+  })
+  .omit({
+    createdAt: true,
+    updatedAt: true,
+  })
 
 export type ExtensionWithCategories = z.infer<typeof selectExtensionsWithCategoriesSchema>
 

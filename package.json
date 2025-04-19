@@ -10,9 +10,9 @@
     "lint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown --ignore-path .prettierignore --cache .",
     "db:generate": "kanel",
-    "db:migrate": "kysely migrate latest",
+    "db:migrate": "kysely migrate latest --experimental-resolve-tsconfig-paths",
     "db:seed": "kysely seed run --experimental-resolve-tsconfig-paths",
-    "db:clear": "kysely migrate rollback --all"
+    "db:clear": "kysely migrate rollback --all --experimental-resolve-tsconfig-paths"
   },
   "lint-staged": {
     "*.js": [
