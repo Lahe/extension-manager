@@ -1,9 +1,14 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { Database } from '@/db/schemas'
-import { createExtension } from '@/features/extensions/api/create-extension'
-import { Category, ExtensionWithCategories } from '@/features/extensions/db/schema'
+import { insertExtension } from '@/features/extensions/db/insertions'
+import {
+  Category,
+  createExtensionWithCategoriesSchema,
+  ExtensionWithCategories,
+} from '@/features/extensions/db/schema'
 import type { Kysely } from 'kysely'
+import { z } from 'zod'
 
 // replace `any` with your database interface.
 export async function seed(db: Kysely<Database>): Promise<void> {
@@ -35,8 +40,14 @@ export async function seed(db: Kysely<Database>): Promise<void> {
       description: item.description,
       isActive: item.isActive,
       logo: item.logo.replace('./assets', '/assets'),
-      categories: item.categories.map((category: Category) => categoryIdMap.get(category.name)),
+      categories: item.categories.map((c: Category) => categoryIdMap.get(c.name)),
     }
-    await createExtension({ data: extensionData })
+
+    const validationRes = createExtensionWithCategoriesSchema
+      .extend({
+        isActive: z.boolean(),
+      })
+      .parse(extensionData)
+    await insertExtension(validationRes)
   }
 }

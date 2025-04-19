@@ -4,7 +4,7 @@ import { z } from 'zod'
 const extensionsFormSchema = z.object({
   id: z.number().int().positive(),
   name: z.string().min(1),
-  logo: z.union([z.literal(''), z.string().trim().url()]),
+  logo: z.union([z.literal(''), z.string().trim()]),
   categories: z.array(z.number()).default([]).optional(),
 })
 
