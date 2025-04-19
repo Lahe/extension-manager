@@ -4,7 +4,7 @@ import { useDeleteExtensionMutation } from '@/features/extensions/api/delete-ext
 import { extensionQueryOptions } from '@/features/extensions/api/get-extension'
 import { useUpdateExtensionMutation } from '@/features/extensions/api/update-extension'
 import { ExtensionForm } from '@/features/extensions/components/extension-form'
-import { UpdateExtensionForm, updateExtensionFormSchema } from '@/features/extensions/db/schema'
+import { UpdateExtensionForm, updateExtensionFormSchema } from '@/features/extensions/schemas'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { ArrowLeft, Trash2 } from 'lucide-react'

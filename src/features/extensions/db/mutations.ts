@@ -6,7 +6,7 @@ import {
   Extension,
   ToggleExtensionStatus,
   UpdateExtension,
-} from '@/features/extensions/db/schema'
+} from '@/features/extensions/schemas'
 import { eq } from 'drizzle-orm'
 
 export async function updateExtensionStatus(input: ToggleExtensionStatus): Promise<Extension> {

@@ -1,6 +1,6 @@
 import { extensionsQueryOptions } from '@/features/extensions/api/get-extensions'
 import { insertExtension } from '@/features/extensions/db/insertions'
-import { createExtensionWithCategoriesSchema, NewExtension } from '@/features/extensions/db/schema'
+import { createExtensionWithCategoriesSchema, NewExtension } from '@/features/extensions/schemas'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'

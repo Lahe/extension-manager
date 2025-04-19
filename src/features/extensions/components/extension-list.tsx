@@ -12,7 +12,7 @@ import { Switch } from '@/components/ui/switch'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { extensionsQueryOptions } from '@/features/extensions/api/get-extensions'
 import { useToggleExtensionMutation } from '@/features/extensions/api/update-extension'
-import { Category, ExtensionWithCategories } from '@/features/extensions/db/schema'
+import { Category, ExtensionWithCategories } from '@/features/extensions/schemas'
 import { cn } from '@/lib/utils'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
@@ -38,7 +38,6 @@ export function ExtensionList() {
   const handleToggle = (extension: ExtensionWithCategories) => {
     toggleExtension({
       id: extension.id,
-      name: extension.name,
       isActive: !extension.isActive,
     })
   }

@@ -11,7 +11,7 @@ export const extensions = pgTable('extensions', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull(),
   description: text('description'),
-  logo: text('logo').notNull(),
+  logo: text('logo'),
   isActive: boolean('is_active').notNull().default(false),
 })
 

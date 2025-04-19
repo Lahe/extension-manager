@@ -15,13 +15,15 @@ export interface ExtensionWithCategories
   extends z.infer<typeof selectExtensionsWithCategoriesSchema> {}
 
 // INSERT
-export const createExtensionSchema = createInsertSchema(extensions, {
-  name: z.string().min(1),
-  logo: z.union([z.literal(''), z.string().trim().url()]),
-})
+const categoryIdsValidation = z.array(selectCategoriesSchema.shape.id).default([])
+const extensionsFormValidation = {
+  name: z.string().min(3, 'Name must be at least 3 characters'),
+}
+
+export const createExtensionSchema = createInsertSchema(extensions, extensionsFormValidation)
 export const createExtensionWithCategoriesSchema = createExtensionSchema
   .extend({
-    categories: z.array(z.number()).default([]).optional(),
+    categories: categoryIdsValidation.optional(),
   })
   .omit({
     isActive: true,
@@ -30,19 +32,18 @@ export const createExtensionWithCategoriesSchema = createExtensionSchema
 export interface NewExtension extends z.infer<typeof createExtensionWithCategoriesSchema> {}
 
 // UPDATE
-export const updateExtensionSchema = createUpdateSchema(extensions, {
-  name: z.string().min(1, 'Name is required'),
-  logo: z.union([z.literal(''), z.string().trim().url()]),
-}).extend({
-  categories: z.array(z.number()).default([]).optional(),
+export const updateExtensionSchema = createUpdateSchema(
+  extensions,
+  extensionsFormValidation
+).extend({
+  categories: categoryIdsValidation.optional(),
 })
 export const updateExtensionFormSchema = updateExtensionSchema.extend({
-  id: z.number().int().positive(),
+  id: selectExtensionsSchema.shape.id,
 })
 
 export const toggleExtensionInputSchema = selectExtensionsSchema.pick({
   id: true,
-  name: true,
   isActive: true,
 })
 

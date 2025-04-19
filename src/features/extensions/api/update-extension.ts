@@ -8,7 +8,7 @@ import {
   ToggleExtensionStatus,
   UpdateExtensionForm,
   updateExtensionFormSchema,
-} from '@/features/extensions/db/schema'
+} from '@/features/extensions/schemas'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'

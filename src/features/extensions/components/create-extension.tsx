@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { useCreateExtensionMutation } from '@/features/extensions/api/create-extension'
 import { ExtensionForm } from '@/features/extensions/components/extension-form'
-import { createExtensionWithCategoriesSchema, NewExtension } from '@/features/extensions/db/schema'
+import { createExtensionWithCategoriesSchema, NewExtension } from '@/features/extensions/schemas'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'

@@ -1,6 +1,6 @@
 import { db } from '@/db/db'
 import { extensions } from '@/db/schema'
-import { Category, ExtensionWithCategories } from '@/features/extensions/db/schema'
+import { Category, ExtensionWithCategories } from '@/features/extensions/schemas'
 import { desc, eq } from 'drizzle-orm'
 
 export async function getExtensionsWithCategories(): Promise<ExtensionWithCategories[]> {

@@ -1,7 +1,7 @@
 import { db } from '@/db/db'
 import { extensions, extensionsToCategories } from '@/db/schema'
 import { getExtensionWithCategoriesById } from '@/features/extensions/db/queries'
-import { ExtensionWithCategories, NewExtension } from '@/features/extensions/db/schema'
+import { ExtensionWithCategories, NewExtension } from '@/features/extensions/schemas'
 
 export async function insertExtension(extension: NewExtension): Promise<ExtensionWithCategories> {
   const { categories, ...extensionData } = extension
