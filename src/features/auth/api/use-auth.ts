@@ -22,9 +22,9 @@ export const useAuth = () => {
           await queryClient.invalidateQueries({ queryKey })
           await navigate({ to: '/' })
         },
-        onError: () => {
+        onError: ({ error }) => {
           toast.error('Signup failed.', {
-            description: 'Please check your email and password and try again.',
+            description: error.message,
           })
         },
       },
@@ -40,9 +40,9 @@ export const useAuth = () => {
           await queryClient.invalidateQueries({ queryKey })
           await navigate({ to: '/' })
         },
-        onError: () => {
+        onError: ({ error }) => {
           toast.error('Login failed.', {
-            description: 'Please check your email and password and try again.',
+            description: error.message,
           })
         },
       },

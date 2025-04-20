@@ -21,12 +21,12 @@ import { LoginFormData, loginSchema } from '@/features/auth/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link } from '@tanstack/react-router'
 import { Github } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 export function Login() {
   const { login, loginSocial } = useAuth()
-
-  const isSubmitting = false
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -37,11 +37,15 @@ export function Login() {
   })
 
   const handleFormSubmit = async (data: LoginFormData) => {
+    setIsSubmitting(true)
     await login(data)
+    setIsSubmitting(false)
   }
 
   const handleGitHubLogin = async () => {
+    setIsSubmitting(true)
     await loginSocial('github')
+    setIsSubmitting(false)
   }
 
   return (

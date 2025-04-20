@@ -16,16 +16,17 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { authClient } from '@/lib/auth-client'
+import { useAuth } from '@/features/auth/api/use-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link } from '@tanstack/react-router'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { SignupFormData, signupSchema } from '../schemas'
 
 export function SignUp() {
-  const isSubmitting = false
+  const { signup } = useAuth()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const form = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
@@ -37,24 +38,9 @@ export function SignUp() {
   })
 
   const handleFormSubmit = async (data: SignupFormData) => {
-    await authClient.signUp.email(
-      {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        callbackURL: '/',
-      },
-      {
-        onSuccess: () => {
-          toast.success('Successfully created an account.')
-        },
-        onError: () => {
-          toast.error('Signup failed.', {
-            description: 'Please check your email and password and try again.',
-          })
-        },
-      }
-    )
+    setIsSubmitting(true)
+    await signup(data)
+    setIsSubmitting(false)
   }
 
   return (
