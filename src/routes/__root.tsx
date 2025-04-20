@@ -21,7 +21,7 @@ export const Route = createRootRouteWithContext<{
   user: Awaited<ReturnType<typeof getUser>>
 }>()({
   beforeLoad: async ({ context }) => {
-    const user = await context.queryClient.ensureQueryData(userQueryOptions())
+    const user = await context.queryClient.fetchQuery(userQueryOptions())
     return { user }
   },
   head: () => ({

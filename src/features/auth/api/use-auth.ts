@@ -12,13 +12,11 @@ export const useAuth = () => {
   const router = useRouter()
 
   const signup = async (data: SignupFormData) =>
-    await authClient.signUp.email(
-      {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      },
-      {
+    await authClient.signUp.email({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      fetchOptions: {
         onSuccess: async () => {
           toast.success('Successfully created an account.')
           await queryClient.invalidateQueries({ queryKey })
@@ -29,16 +27,14 @@ export const useAuth = () => {
             description: 'Please check your email and password and try again.',
           })
         },
-      }
-    )
+      },
+    })
 
   const login = async (data: LoginFormData) =>
-    await authClient.signIn.email(
-      {
-        email: data.email,
-        password: data.password,
-      },
-      {
+    await authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+      fetchOptions: {
         onSuccess: async () => {
           toast.success('Login successful.')
           await queryClient.invalidateQueries({ queryKey })
@@ -49,8 +45,8 @@ export const useAuth = () => {
             description: 'Please check your email and password and try again.',
           })
         },
-      }
-    )
+      },
+    })
 
   const loginSocial = async (provider: 'github') => {
     await authClient.signIn.social({
