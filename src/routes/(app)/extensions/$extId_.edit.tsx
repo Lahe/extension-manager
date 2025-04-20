@@ -27,8 +27,15 @@ export const Route = createFileRoute('/(app)/extensions/$extId_/edit')({
   loader: async ({ params, context }) => {
     const extension = context.queryClient.ensureQueryData(extensionQueryOptions(params.extId))
     const categories = context.queryClient.ensureQueryData(categoriesQueryOptions())
-    return Promise.all([extension, categories])
+    const res = await Promise.all([extension, categories])
+
+    return {
+      title: `Editing extension - ${res[0].name}`,
+    }
   },
+  head: ({ loaderData }) => ({
+    meta: loaderData ? [{ title: loaderData.title }] : undefined,
+  }),
   notFoundComponent: () => <div>Extension not found!</div>,
   wrapInSuspense: true,
 })
