@@ -1,7 +1,7 @@
 # Extension Management Dashboard
 
 A [Frontend Mentor](https://www.frontendmentor.io/challenges/browser-extension-manager-ui-yNZnOfsMAp) challenge extended to a full stack app using:
-- [TanStack Start](https://tanstack.com/start/latest),
+- [TanStack Start](https://tanstack.com/start/latest)
 - [Drizzle ORM](https://orm.drizzle.team/) with a [PostgreSQL](https://www.postgresql.org/) database
     - A [separate branch](https://github.com/Lahe/extension-manager/tree/kysely) for trying out [Kysely](https://kysely.dev/) and [Kanel](https://kristiandupont.github.io/kanel/) instead of Drizzle
 - [Shadcn/ui](https://ui.shadcn.com/)
