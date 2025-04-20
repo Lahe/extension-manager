@@ -9,7 +9,9 @@ export const Route = createFileRoute('/(app)/extensions/new')({
       throw redirect({ to: '/login' })
     }
   },
-  loader: ({ context }) => context.queryClient.ensureQueryData(categoriesQueryOptions()),
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(categoriesQueryOptions())
+  },
   head: () => ({
     meta: [{ title: 'New Extension' }],
   }),

@@ -18,14 +18,11 @@ export const Route = createFileRoute('/(app)/extensions/$extId')({
       }
     },
   },
-  loader: async ({ params, context }) => {
-    const data = await context.queryClient.ensureQueryData(extensionQueryOptions(params.extId))
-    return {
-      title: `Extension - ${data.name}`,
-    }
+  loader: ({ params, context }) => {
+    context.queryClient.ensureQueryData(extensionQueryOptions(params.extId))
   },
-  head: ({ loaderData }) => ({
-    meta: loaderData ? [{ title: loaderData.title }] : undefined,
+  head: () => ({
+    meta: [{ title: 'Extension Details' }],
   }),
   notFoundComponent: () => <div>Extension not found!</div>,
   wrapInSuspense: true,

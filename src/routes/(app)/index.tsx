@@ -3,7 +3,9 @@ import { ExtensionList } from '@/features/extensions/components/extension-list'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/(app)/')({
-  loader: ({ context }) => context.queryClient.ensureQueryData(extensionsQueryOptions()),
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(extensionsQueryOptions())
+  },
   head: () => ({
     meta: [{ title: 'Extensions' }],
   }),

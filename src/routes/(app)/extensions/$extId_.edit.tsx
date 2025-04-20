@@ -24,17 +24,13 @@ export const Route = createFileRoute('/(app)/extensions/$extId_/edit')({
       throw redirect({ to: '/login' })
     }
   },
-  loader: async ({ params, context }) => {
+  loader: ({ params, context }) => {
     const extension = context.queryClient.ensureQueryData(extensionQueryOptions(params.extId))
     const categories = context.queryClient.ensureQueryData(categoriesQueryOptions())
-    const res = await Promise.all([extension, categories])
-
-    return {
-      title: `Editing extension - ${res[0].name}`,
-    }
+    Promise.all([extension, categories])
   },
-  head: ({ loaderData }) => ({
-    meta: loaderData ? [{ title: loaderData.title }] : undefined,
+  head: () => ({
+    meta: [{ title: 'Editing extension' }],
   }),
   notFoundComponent: () => <div>Extension not found!</div>,
   wrapInSuspense: true,
