@@ -29,7 +29,6 @@ export function createRouter() {
       defaultPendingComponent: Spinner,
       scrollRestoration: true,
       defaultStructuralSharing: true,
-      defaultPendingMs: 0, // https://github.com/TanStack/router/issues/1929
     }),
     queryClient
   )
