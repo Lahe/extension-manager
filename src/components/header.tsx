@@ -16,9 +16,6 @@ import { Bell, HelpCircle, Search, Settings } from 'lucide-react'
 export function Header() {
   const { data: user } = useSuspenseQuery(userQueryOptions())
 
-  console.log('rendering header')
-  console.log(user)
-
   return (
     <header className="bg-background/95 sticky top-0 z-50 flex w-full justify-center border-b backdrop-blur">
       <div className="container flex h-14 items-center justify-between">

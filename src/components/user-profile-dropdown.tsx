@@ -16,9 +16,6 @@ export function UserProfileDropdown() {
   const { logout } = useAuth()
   const { data: user } = useSuspenseQuery(userQueryOptions())
 
-  console.log('user profile dropdown')
-  console.log(user)
-
   if (!user) {
     return null
   }

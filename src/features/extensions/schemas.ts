@@ -31,8 +31,9 @@ export const createExtensionWithCategoriesSchema = createExtensionSchema
   })
   .omit({
     isActive: true,
+    createdAt: true,
+    updatedAt: true,
   })
-  .strict()
 
 export interface NewExtension extends z.infer<typeof createExtensionWithCategoriesSchema> {}
 
@@ -41,20 +42,19 @@ export const updateExtensionSchema = createUpdateSchema(extensions, extensionsFo
   .extend({
     categories: categoryIdsValidation.optional(),
   })
-  .strict()
-
-export const updateExtensionFormSchema = updateExtensionSchema
-  .extend({
-    id: selectExtensionsSchema.shape.id,
+  .omit({
+    createdAt: true,
+    updatedAt: true,
   })
-  .strict()
 
-export const toggleExtensionInputSchema = selectExtensionsSchema
-  .pick({
-    id: true,
-    isActive: true,
-  })
-  .strict()
+export const updateExtensionFormSchema = updateExtensionSchema.extend({
+  id: selectExtensionsSchema.shape.id,
+})
+
+export const toggleExtensionInputSchema = selectExtensionsSchema.pick({
+  id: true,
+  isActive: true,
+})
 
 export interface UpdateExtension extends z.infer<typeof updateExtensionSchema> {}
 export interface UpdateExtensionForm extends z.infer<typeof updateExtensionFormSchema> {}
