@@ -1,10 +1,17 @@
-import { relations } from 'drizzle-orm'
-import { boolean, integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core'
+import { relations, sql } from 'drizzle-orm'
+import { boolean, integer, pgTable, primaryKey, text, timestamp } from 'drizzle-orm/pg-core'
 
 export const categories = pgTable('categories', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull().unique(),
   color: text('color').notNull(),
+  createdAt: timestamp('created_at', { mode: 'string', withTimezone: true })
+    .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    .notNull(),
+  updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true })
+    .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    .notNull()
+    .$onUpdate(() => sql`(now() AT TIME ZONE 'utc'::text)`),
 })
 
 export const extensions = pgTable('extensions', {
@@ -13,6 +20,13 @@ export const extensions = pgTable('extensions', {
   description: text('description'),
   logo: text('logo'),
   isActive: boolean('is_active').notNull().default(false),
+  createdAt: timestamp('created_at', { mode: 'string', withTimezone: true })
+    .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    .notNull(),
+  updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true })
+    .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    .notNull()
+    .$onUpdate(() => sql`(now() AT TIME ZONE 'utc'::text)`),
 })
 
 export const extensionsToCategories = pgTable(

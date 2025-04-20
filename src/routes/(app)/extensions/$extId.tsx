@@ -20,7 +20,6 @@ export const Route = createFileRoute('/(app)/extensions/$extId')({
   },
   loader: async ({ params, context }) =>
     context.queryClient.ensureQueryData(extensionQueryOptions(params.extId)),
-  pendingComponent: () => <div>Loading...</div>,
   notFoundComponent: () => <div>Extension not found!</div>,
   wrapInSuspense: true,
 })

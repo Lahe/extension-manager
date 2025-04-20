@@ -1,12 +1,14 @@
 import { extensionQueryOptions } from '@/features/extensions/api/get-extension'
 import { extensionsQueryOptions } from '@/features/extensions/api/get-extensions'
 import { deleteExtensionById } from '@/features/extensions/db/mutations'
+import { authMiddleware } from '@/middleware/auth-guard'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { toast } from 'sonner'
 
 export const deleteExtension = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware])
   .validator((id: number) => id)
   .handler(async ({ data: id }) => {
     try {

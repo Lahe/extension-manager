@@ -10,7 +10,6 @@ export const Route = createFileRoute('/(app)/')({
     meta: [{ title: 'Extensions' }],
   }),
   component: ExtensionsPage,
-  pendingComponent: () => <div>Loading...</div>,
   wrapInSuspense: true,
 })
 

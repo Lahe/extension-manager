@@ -11,6 +11,8 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SignupImport } from './routes/signup'
+import { Route as LoginImport } from './routes/login'
 import { Route as appRouteImport } from './routes/(app)/route'
 import { Route as appIndexImport } from './routes/(app)/index'
 import { Route as appExtensionsNewImport } from './routes/(app)/extensions/new'
@@ -18,6 +20,18 @@ import { Route as appExtensionsExtIdImport } from './routes/(app)/extensions/$ex
 import { Route as appExtensionsExtIdEditImport } from './routes/(app)/extensions/$extId_.edit'
 
 // Create/Update Routes
+
+const SignupRoute = SignupImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const appRouteRoute = appRouteImport.update({
   id: '/(app)',
@@ -57,6 +71,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof appRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
     '/(app)/': {
@@ -112,12 +140,16 @@ const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof appIndexRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/extensions/$extId': typeof appExtensionsExtIdRoute
   '/extensions/new': typeof appExtensionsNewRoute
   '/extensions/$extId/edit': typeof appExtensionsExtIdEditRoute
 }
 
 export interface FileRoutesByTo {
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/': typeof appIndexRoute
   '/extensions/$extId': typeof appExtensionsExtIdRoute
   '/extensions/new': typeof appExtensionsNewRoute
@@ -127,6 +159,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/(app)': typeof appRouteRouteWithChildren
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/(app)/': typeof appIndexRoute
   '/(app)/extensions/$extId': typeof appExtensionsExtIdRoute
   '/(app)/extensions/new': typeof appExtensionsNewRoute
@@ -137,14 +171,24 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
+    | '/signup'
     | '/extensions/$extId'
     | '/extensions/new'
     | '/extensions/$extId/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/extensions/$extId' | '/extensions/new' | '/extensions/$extId/edit'
+  to:
+    | '/login'
+    | '/signup'
+    | '/'
+    | '/extensions/$extId'
+    | '/extensions/new'
+    | '/extensions/$extId/edit'
   id:
     | '__root__'
     | '/(app)'
+    | '/login'
+    | '/signup'
     | '/(app)/'
     | '/(app)/extensions/$extId'
     | '/(app)/extensions/new'
@@ -154,10 +198,14 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   appRouteRoute: typeof appRouteRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   appRouteRoute: appRouteRouteWithChildren,
+  LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
 }
 
 export const routeTree = rootRoute
@@ -170,7 +218,9 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/(app)"
+        "/(app)",
+        "/login",
+        "/signup"
       ]
     },
     "/(app)": {
@@ -181,6 +231,12 @@ export const routeTree = rootRoute
         "/(app)/extensions/new",
         "/(app)/extensions/$extId_/edit"
       ]
+    },
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/signup": {
+      "filePath": "signup.tsx"
     },
     "/(app)/": {
       "filePath": "(app)/index.tsx",

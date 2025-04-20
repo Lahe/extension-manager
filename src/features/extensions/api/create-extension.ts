@@ -1,12 +1,14 @@
 import { extensionsQueryOptions } from '@/features/extensions/api/get-extensions'
 import { insertExtension } from '@/features/extensions/db/insertions'
 import { createExtensionWithCategoriesSchema, NewExtension } from '@/features/extensions/schemas'
+import { authMiddleware } from '@/middleware/auth-guard'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { toast } from 'sonner'
 
 export const createExtension = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware])
   .validator(createExtensionWithCategoriesSchema)
   .handler(async ({ data }) => {
     try {

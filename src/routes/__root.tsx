@@ -1,6 +1,7 @@
 import { DefaultCatchBoundary } from '@/components/errors/default-catch-boundary'
 import { NotFound } from '@/components/errors/not-found'
 import { Toaster } from '@/components/ui/sonner'
+import { getUser, userQueryOptions } from '@/features/auth/api/get-user'
 import { seo } from '@/lib/seo'
 import appCss from '@/styles/app.css?url'
 import { QueryClient } from '@tanstack/react-query'
@@ -17,7 +18,12 @@ import type { ReactNode } from 'react'
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
+  user: Awaited<ReturnType<typeof getUser>>
 }>()({
+  beforeLoad: async ({ context }) => {
+    const user = await context.queryClient.ensureQueryData(userQueryOptions())
+    return { user }
+  },
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
@@ -60,7 +66,7 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html>
+    <html suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

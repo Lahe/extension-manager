@@ -7,10 +7,18 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
+import { UserProfileDropdown } from '@/components/user-profile-dropdown'
+import { userQueryOptions } from '@/features/auth/api/get-user'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Bell, HelpCircle, Search, Settings } from 'lucide-react'
 
 export function Header() {
+  const { data: user } = useSuspenseQuery(userQueryOptions())
+
+  console.log('rendering header')
+  console.log(user)
+
   return (
     <header className="bg-background/95 sticky top-0 z-50 flex w-full justify-center border-b backdrop-blur">
       <div className="container flex h-14 items-center justify-between">
@@ -71,6 +79,16 @@ export function Header() {
               <DropdownMenuItem>About</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <div className="flex flex-1 items-center justify-end space-x-4">
+            {user ? (
+              <UserProfileDropdown />
+            ) : (
+              <Button asChild size="sm">
+                <Link to="/login">Log in</Link>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </header>
