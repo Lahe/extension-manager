@@ -37,7 +37,7 @@ A [Frontend Mentor](https://www.frontendmentor.io/challenges/browser-extension-m
         ```bash
         DATABASE_URL=postgresql://<user>:<password>@<host>:<port>/<database>
         BETTER_AUTH_URL=http://localhost:3000
-        BETTER_AUTH_SECRET=w0GSna8mzem2gHF8nqFAUTfgRLTQaZk7
+        BETTER_AUTH_SECRET=<your_secret_here>
         ```
 
 4. **Set up the database:**
