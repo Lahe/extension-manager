@@ -17,7 +17,7 @@
     "db:clear": "pnpm tsx --env-file=.env ./src/db/clear.ts"
   },
   "lint-staged": {
-    "*.js": [
+    "src/**/*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write --ignore-unknown"
     ]
